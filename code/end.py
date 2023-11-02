@@ -7,6 +7,9 @@ class End:
         self.font = pygame.font.Font(UI_FONT,UI_FONT_SIZE)
         self.leaderboard = []
 
+    def add_to_leaderboard(self,player):
+        pass
+
     def show_leaderboard(self):
         pass
 
