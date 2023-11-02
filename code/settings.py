@@ -34,6 +34,25 @@ BAR_COLOR = '#EEEEEE'
 BAR_COLOR_SELECTED = '#111111'
 UPGRADE_BG_COLOR_SELECTED = '#EEEEEE'
 
+TEXT_COLOR_HOVER = 'red'
+
+# player
+male_player_data = {
+    'health': 100,
+    'energy':60,
+    'attack': 10,
+    'magic': 4,
+    'speed': 5
+}
+
+female_player_data = {
+	'health': 80,
+	'energy':80,
+	'attack': 8,
+	'magic': 6,
+	'speed': 7
+}
+
 # weapons 
 weapon_data = {
 	'sword': {'cooldown': 100, 'damage': 15,'graphic':'../graphics/weapons/sword/full.png'},

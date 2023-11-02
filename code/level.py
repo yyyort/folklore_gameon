@@ -11,6 +11,7 @@ from enemy import Enemy
 from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade
+from intro import Intro
 
 class Level:
 	def __init__(self):
@@ -38,6 +39,10 @@ class Level:
 		# particles
 		self.animation_player = AnimationPlayer()
 		self.magic_player = MagicPlayer(self.animation_player)
+
+		#intro
+		self.state = 'intro'
+		self.intro = Intro()
 
 	def create_map(self):
 		layouts = {
@@ -145,16 +150,26 @@ class Level:
 		self.game_paused = not self.game_paused 
 
 	def run(self):
-		self.visible_sprites.custom_draw(self.player)
-		self.ui.display(self.player)
+		if self.state == 'intro':
+			self.intro.display()
+			if self.intro.start_button():
+				self.player.name = self.intro.input
+				self.player.gender = self.intro.select
+				self.state = 'game'
+
+		if self.state == 'game':
+			self.visible_sprites.custom_draw(self.player)
+			self.ui.display(self.player)
+			
+			if self.game_paused:
+				self.upgrade.display()
+			else:
+				self.visible_sprites.update()
+				self.visible_sprites.enemy_update(self.player)
+				self.player_attack_logic()
 		
-		if self.game_paused:
-			self.upgrade.display()
-		else:
-			self.visible_sprites.update()
-			self.visible_sprites.enemy_update(self.player)
-			self.player_attack_logic()
-		
+		if self.state == 'end':
+			pass
 
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):

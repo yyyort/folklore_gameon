@@ -10,6 +10,10 @@ class Player(Entity):
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
 
+		#info
+		self.name = 'player'
+		self.gender = ''
+
 		# graphics setup
 		self.import_player_assets()
 		self.status = 'down'
