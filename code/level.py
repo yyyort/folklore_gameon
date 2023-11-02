@@ -12,6 +12,7 @@ from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade
 from intro import Intro
+from end import End
 
 class Level:
 	def __init__(self):
@@ -41,8 +42,9 @@ class Level:
 		self.magic_player = MagicPlayer(self.animation_player)
 
 		#intro
-		self.state = 'intro'
+		self.state = 'end'
 		self.intro = Intro()
+		self.end = End()
 
 	def create_map(self):
 		layouts = {
@@ -149,13 +151,43 @@ class Level:
 
 		self.game_paused = not self.game_paused 
 
+	def reset(self):
+		#reset everthing
+		# get the display surface 
+		self.display_surface = pygame.display.get_surface()
+		self.game_paused = False
+
+		# sprite group setup
+		self.visible_sprites = YSortCameraGroup()
+		self.obstacle_sprites = pygame.sprite.Group()
+
+		# attack sprites
+		self.current_attack = None
+		self.attack_sprites = pygame.sprite.Group()
+		self.attackable_sprites = pygame.sprite.Group()
+
+		# sprite setup
+		self.create_map()
+
+		# user interface 
+		self.ui = UI()
+		self.upgrade = Upgrade(self.player)
+
+		# particles
+		self.animation_player = AnimationPlayer()
+		self.magic_player = MagicPlayer(self.animation_player)
+
+		#intro
+		self.intro = Intro()
+		self.end = End()
+
 	def run(self):
-		if self.state == 'intro':
+		""" if self.state == 'intro':
 			self.intro.display()
 			if self.intro.start_button():
 				self.player.name = self.intro.input
 				self.player.gender = self.intro.select
-				self.state = 'game'
+				self.state = 'game' """
 
 		if self.state == 'game':
 			self.visible_sprites.custom_draw(self.player)
@@ -167,9 +199,31 @@ class Level:
 				self.visible_sprites.update()
 				self.visible_sprites.enemy_update(self.player)
 				self.player_attack_logic()
+			
+			if self.player.health <= 0:
+				self.state = 'end'
+				self.end.add_to_leaderboard(self.player)
 		
+		""" if self.state == 'end':
+			self.end.display(self.player)
+			if self.end.restart_button():
+				self.state = 'intro' """
+
+	def intro_state(self):
+		if self.state == 'intro':
+			self.intro.display()
+			if self.intro.start_button():
+				self.player.name = self.intro.input
+				self.player.gender = self.intro.select
+				self.state = 'game'
+				
+	def end_state(self):
 		if self.state == 'end':
-			pass
+			self.end.display(self.player)
+			if self.end.restart_button():
+				self.state = 'intro'
+				print('test')
+				self.reset()
 
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):

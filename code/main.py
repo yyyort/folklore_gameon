@@ -33,15 +33,23 @@ class Game:
 						else:
 							self.level.intro.input += event.unicode
 
-				if self.level.state == 'game':
-					if event.type == pygame.KEYDOWN:
-						if event.key == pygame.K_m:
-							self.level.toggle_menu()
-					
-			print(f"{self.level.player.name}, {self.level.player.gender}")
-			
-			self.screen.fill(WATER_COLOR)
-			self.level.run()
+			if self.level.state == 'intro':
+				self.screen.fill(WATER_COLOR)
+				self.level.intro_state()
+
+			if self.level.state == 'end':
+				self.screen.fill(WATER_COLOR)
+				self.level.end_state()
+
+			if self.level.state == 'game':
+				self.screen.fill(WATER_COLOR)
+				self.level.run()
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_m:
+						self.level.toggle_menu()
+
+			#self.screen.fill(WATER_COLOR)
+			#self.level.run()
 			pygame.display.update()
 			self.clock.tick(FPS)
 

@@ -7,8 +7,15 @@ class Intro:
         self.font = pygame.font.Font(UI_FONT,UI_FONT_SIZE)
         self.input = ''
         self.select = ''
+        self.click_time = None
+        self.can_click = True
 
-        
+    def click_cooldown(self):
+        if not self.can_click:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.click_time >= 300:
+                self.can_click = True
+
     def show_text(self,text):
         text_surf = self.font.render(text,False,TEXT_COLOR)
         text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2))
@@ -18,7 +25,7 @@ class Intro:
         text_surf = self.font.render('Start',False,TEXT_COLOR)
         text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2 + 300))
         self.display_surface.blit(text_surf,text_rect)
-        if pygame.mouse.get_pressed()[0] and text_rect.collidepoint(pygame.mouse.get_pos()):
+        if self.can_click and pygame.mouse.get_pressed()[0] and text_rect.collidepoint(pygame.mouse.get_pos()):
             return True
         
     def male_button(self):
@@ -95,7 +102,6 @@ class Intro:
         speed = self.font.render('Speed: 6',False,TEXT_COLOR)
         speed_rect = speed.get_rect(center = (self.display_surface.get_size()[0]//2 + 200,self.display_surface.get_size()[1]//2 + 180))
         self.display_surface.blit(speed,speed_rect)
-
 
     def display(self):
         self.input_name()
