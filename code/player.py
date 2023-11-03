@@ -42,13 +42,14 @@ class Player(Entity):
 
 		# stats
 		self.exp_cap = 15
-		self.stats = {'health': 100,'energy':60,'attack': 10,'magic': 4,'speed': 5, 'level' : 1, 'exp' : 0, 'score': 0}
+		self.stats = {'health': 100,'energy':60,'attack': 10,'magic': 4,'speed': 5, 'sprint_speed' : 10, 'level' : 1, 'exp' : 0, 'score': 0}
 		self.max_stats = {'health': 150, 'energy': 140, 'attack': 20, 'magic' : 10, 'speed': 10}
 		self.upgrade_cost = {'health': 100, 'energy': 100, 'attack': 100, 'magic' : 100, 'speed': 100}
 		self.health = self.stats['health']
 		self.energy = self.stats['energy']
 		self.exp = self.stats['exp']
 		self.speed = self.stats['speed']
+		self.sprint = self.stats['sprint_speed']
 		self.level = self.stats['level']
 		self.score = self.stats['score']
 

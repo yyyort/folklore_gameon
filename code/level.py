@@ -91,7 +91,7 @@ class Level:
 								if col == '390': monster_name = 'bamboo'
 								elif col == '391': monster_name = 'spirit'
 								elif col == '392': monster_name ='raccoon'
-								else: monster_name = 'squid'
+								elif col == '393': monster_name = 'squid'
 								Enemy(
 									monster_name,
 									(x,y),
@@ -243,7 +243,7 @@ class YSortCameraGroup(pygame.sprite.Group):
 		self.offset = pygame.math.Vector2()
 
 		# creating the floor
-		self.floor_surf = pygame.image.load('../graphics/tilemap/map_2.png').convert()
+		self.floor_surf = pygame.image.load('../graphics/tilemap/_map_partial_detailed_1.png').convert()
 		self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
 
 	def custom_draw(self,player):
