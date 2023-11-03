@@ -4,7 +4,7 @@ from entity import Entity
 from support import *
 
 class Enemy(Entity):
-	def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
+	def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp, add_score):
 
 		# general setup
 		super().__init__(groups)
@@ -25,6 +25,7 @@ class Enemy(Entity):
 		monster_info = monster_data[self.monster_name]
 		self.health = monster_info['health']
 		self.exp = monster_info['exp']
+		self.score = monster_info['score']
 		self.speed = monster_info['speed']
 		self.attack_damage = monster_info['damage']
 		self.resistance = monster_info['resistance']
@@ -39,6 +40,7 @@ class Enemy(Entity):
 		self.damage_player = damage_player
 		self.trigger_death_particles = trigger_death_particles
 		self.add_exp = add_exp
+		self.add_score = add_score
 
 		# invincibility timer
 		self.vulnerable = True
@@ -137,6 +139,7 @@ class Enemy(Entity):
 			self.kill()
 			self.trigger_death_particles(self.rect.center,self.monster_name)
 			self.add_exp(self.exp)
+			self.add_score(self.score)
 			self.death_sound.play()
 
 	def hit_reaction(self):

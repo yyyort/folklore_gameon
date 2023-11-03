@@ -40,10 +40,20 @@ class UI:
 		pygame.draw.rect(self.display_surface,color,current_rect)
 		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,bg_rect,3)
 
-	def show_exp(self,exp):
-		text_surf = self.font.render(str(int(exp)),False,TEXT_COLOR)
+	def show_exp(self,level,exp,exp_cap):
+		text_surf = self.font.render(f'Level:{level}:EXP:{exp}/{exp_cap:.2f}',False,TEXT_COLOR)
 		x = self.display_surface.get_size()[0] - 20
 		y = self.display_surface.get_size()[1] - 20
+		text_rect = text_surf.get_rect(bottomright = (x,y))
+
+		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20,20))
+		self.display_surface.blit(text_surf,text_rect)
+		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
+  
+	def show_score(self,score):
+		text_surf = self.font.render(f'Score:{score}',False,TEXT_COLOR)
+		x = self.display_surface.get_size()[0] - 20
+		y = self.display_surface.get_size()[1] - 70
 		text_rect = text_surf.get_rect(bottomright = (x,y))
 
 		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20,20))
@@ -77,7 +87,8 @@ class UI:
 		self.show_bar(player.health,player.stats['health'],self.health_bar_rect,HEALTH_COLOR)
 		self.show_bar(player.energy,player.stats['energy'],self.energy_bar_rect,ENERGY_COLOR)
 
-		self.show_exp(player.exp)
+		self.show_exp(player.level, player.exp, player.exp_cap)
+		self.show_score(player.score)
 
 		self.weapon_overlay(player.weapon_index,not player.can_switch_weapon)
 		self.magic_overlay(player.magic_index,not player.can_switch_magic)

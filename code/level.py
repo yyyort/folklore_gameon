@@ -42,7 +42,7 @@ class Level:
 		self.magic_player = MagicPlayer(self.animation_player)
 
 		#intro
-		self.state = 'end'
+		self.state = 'intro'
 		self.intro = Intro()
 		self.end = End()
 
@@ -99,7 +99,8 @@ class Level:
 									self.obstacle_sprites,
 									self.damage_player,
 									self.trigger_death_particles,
-									self.add_exp)
+									self.add_exp,
+         							self.add_score)
 
 	def create_attack(self):
 		
@@ -146,6 +147,10 @@ class Level:
 	def add_exp(self,amount):
 
 		self.player.exp += amount   
+
+	def add_score(self, amount):
+
+		self.player.score += amount
 
 	def toggle_menu(self):
 
@@ -209,7 +214,7 @@ class Level:
 			if self.end.restart_button():
 				self.state = 'intro' """
     
-		debug(f'level:{self.player.level}\nexp:{self.player.exp} / {self.player.exp_cap}')
+		# debug(f'level:{self.player.level}\nexp:{self.player.exp} / {self.player.exp_cap:.0f}')
 
 	def intro_state(self):
 		if self.state == 'intro':

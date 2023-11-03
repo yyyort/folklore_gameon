@@ -16,16 +16,16 @@ class End:
                 self.can_click = True
 
     def add_to_leaderboard(self,player):
-        self.leaderboard.append({'name':player.name,'exp':player.exp})
+        self.leaderboard.append({'name':player.name,'score':player.score})
 
     def show_leaderboard(self):
         for i,player in enumerate(self.leaderboard):
-            text_surf = self.font.render(f"{player['name']} {player['exp']}",False,TEXT_COLOR)
+            text_surf = self.font.render(f"{player['name']} {player['score']}",False,TEXT_COLOR)
             text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2 + 50*i))
             self.display_surface.blit(text_surf,text_rect)
 
     def current_player(self,player):
-        text_surf = self.font.render(f"{player.name} {player.exp}",False,TEXT_COLOR)
+        text_surf = self.font.render(f"{player.name} {player.score}",False,TEXT_COLOR)
         text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2))
         self.display_surface.blit(text_surf,text_rect)
     
