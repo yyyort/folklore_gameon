@@ -48,10 +48,10 @@ class Level:
 
 	def create_map(self):
 		layouts = {
-			'boundary': import_csv_layout('../map/map__boundery.csv'),
+			'boundary': import_csv_layout('../map/_map_boundery.csv'),
 			# 'grass': import_csv_layout('../map/map_Grass.csv'),
 			# 'object': import_csv_layout('../map/map_Objects.csv'),
-			'entities': import_csv_layout('../map/map__entity.csv')
+			'entities': import_csv_layout('../map/_map_entity.csv')
 		}
 		graphics = {
 			'grass': import_folder('../graphics/grass'),
@@ -94,7 +94,7 @@ class Level:
 								else: monster_name = 'squid'
 								Enemy(
 									monster_name,
-									(0,0),
+									(x,y),
 									[self.visible_sprites,self.attackable_sprites],
 									self.obstacle_sprites,
 									self.damage_player,
@@ -145,7 +145,7 @@ class Level:
 
 	def add_exp(self,amount):
 
-		self.player.exp += amount
+		self.player.exp += amount   
 
 	def toggle_menu(self):
 
@@ -208,6 +208,8 @@ class Level:
 			self.end.display(self.player)
 			if self.end.restart_button():
 				self.state = 'intro' """
+    
+		debug(f'level:{self.player.level}\nexp:{self.player.exp} / {self.player.exp_cap}')
 
 	def intro_state(self):
 		if self.state == 'intro':

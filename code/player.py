@@ -41,13 +41,15 @@ class Player(Entity):
 		self.magic_switch_time = None
 
 		# stats
-		self.stats = {'health': 100,'energy':60,'attack': 10,'magic': 4,'speed': 5}
+		self.exp_cap = 1000
+		self.stats = {'health': 100,'energy':60,'attack': 10,'magic': 4,'speed': 5, 'level' : 1, 'exp' : 0}
 		self.max_stats = {'health': 300, 'energy': 140, 'attack': 20, 'magic' : 10, 'speed': 10}
 		self.upgrade_cost = {'health': 100, 'energy': 100, 'attack': 100, 'magic' : 100, 'speed': 100}
 		self.health = self.stats['health'] * 0.5
 		self.energy = self.stats['energy'] * 0.8
-		self.exp = 5000
+		self.exp = self.stats['exp']
 		self.speed = self.stats['speed']
+		self.level = self.stats['level']
 
 		# damage timer
 		self.vulnerable = True
@@ -209,6 +211,13 @@ class Player(Entity):
 		else:
 			self.energy = self.stats['energy']
 
+	def level_up(self):
+		if self.exp >= self.exp_cap:
+			self.level += 1
+			self.exp_cap *= self.level
+			self.exp -= self.exp
+
+
 	def update(self):
 		self.input()
 		self.cooldowns()
@@ -216,3 +225,4 @@ class Player(Entity):
 		self.animate()
 		self.move(self.stats['speed'])
 		self.energy_recovery()
+		self.level_up()
