@@ -22,36 +22,23 @@ class Upgrade:
 		self.selection_time = None
 		self.can_move = True
 
-	#def input(self):
-#		keys = pygame.key.get_pressed()
-
-#		if self.can_move:
-#			if keys[pygame.K_RIGHT] and self.selection_index < self.attribute_nr - 1:
-#				self.selection_index += 1
-#				self.can_move = False
-#				self.selection_time = pygame.time.get_ticks()
-#			elif keys[pygame.K_LEFT] and self.selection_index >= 1:
-#				self.selection_index -= 1
-#				self.can_move = False
-#				self.selection_time = pygame.time.get_ticks()
-
-#			if keys[pygame.K_SPACE]:
-#				self.can_move = False
-#				self.selection_time = pygame.time.get_ticks()
-#				self.item_list[self.selection_index].trigger(self.player)
-	def handle_mouse_click(self):
-		for index, item in enumerate(self.item_list):
-			if item.rect.collidepoint(pygame.mouse.get_pos()):
-				self.item_list[index].trigger(self.player)
-    
 	def input(self):
-		mouse_x, mouse_y = pygame.mouse.get_pos()
-		for index, item in enumerate(self.item_list):
-			if item.rect.collidepoint(mouse_x, mouse_y):
-				self.selection_index = index
-		for event in pygame.event.get():
-			if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				self.handle_mouse_click()
+		keys = pygame.key.get_pressed()
+
+		if self.can_move:
+			if keys[pygame.K_RIGHT] and self.selection_index < self.attribute_nr - 1:
+				self.selection_index += 1
+				self.can_move = False
+				self.selection_time = pygame.time.get_ticks()
+			elif keys[pygame.K_LEFT] and self.selection_index >= 1:
+				self.selection_index -= 1
+				self.can_move = False
+				self.selection_time = pygame.time.get_ticks()
+
+			if keys[pygame.K_SPACE]:
+				self.can_move = False
+				self.selection_time = pygame.time.get_ticks()
+				self.item_list[self.selection_index].trigger(self.player)
 
 	def selection_cooldown(self):
 		if not self.can_move:
@@ -69,7 +56,7 @@ class Upgrade:
 			left = (item * increment) + (increment - self.width) // 2
 			
 			# vertical position 
-			top = self.display_surface.get_size()[1] * 0.085
+			top = self.display_surface.get_size()[1] * 0.1
 
 			# create the object 
 			item = Item(left,top,self.width,self.height,index,self.font)
@@ -80,6 +67,7 @@ class Upgrade:
 		self.selection_cooldown()
 
 		for index, item in enumerate(self.item_list):
+
 			# get attributes
 			name = self.attribute_names[index]
 			value = self.player.get_value_by_index(index)
@@ -109,6 +97,7 @@ class Item:
 		surface.blit(cost_surf,cost_rect)
 
 	def display_bar(self,surface,value,max_value,selected):
+
 		# drawing setup
 		top = self.rect.midtop + pygame.math.Vector2(0,60)
 		bottom = self.rect.midbottom - pygame.math.Vector2(0,60)
@@ -120,9 +109,8 @@ class Item:
 		value_rect = pygame.Rect(top[0] - 15,bottom[1] - relative_number,30,10)
 
 		# draw elements
-		# pygame.draw.line(surface,color,top,bottom,5)
-		# pygame.draw.rect(surface,color,value_rect)
-		pygame.draw.rect(surface, color, value_rect)
+		pygame.draw.line(surface,color,top,bottom,5)
+		pygame.draw.rect(surface,color,value_rect)
 
 	def trigger(self,player):
 		upgrade_attribute = list(player.stats.keys())[self.index]
@@ -138,10 +126,10 @@ class Item:
 	def display(self,surface,selection_num,name,value,max_value,cost):
 		if self.index == selection_num:
 			pygame.draw.rect(surface,UPGRADE_BG_COLOR_SELECTED,self.rect)
-			# pygame.draw.rect(surface,UI_BORDER_COLOR,self.rect,4)
+			pygame.draw.rect(surface,UI_BORDER_COLOR,self.rect,4)
 		else:
 			pygame.draw.rect(surface,UI_BG_COLOR,self.rect)
-			# pygame.draw.rect(surface,UI_BORDER_COLOR,self.rect,4)
+			pygame.draw.rect(surface,UI_BORDER_COLOR,self.rect,4)
 	
 		self.display_names(surface,name,cost,self.index == selection_num)
-		# self.display_bar(surface,value,max_value,self.index == selection_num)
+		self.display_bar(surface,value,max_value,self.index == selection_num)
