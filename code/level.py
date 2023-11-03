@@ -214,7 +214,7 @@ class Level:
 			if self.end.restart_button():
 				self.state = 'intro' """
     
-		debug(f'Player Stats {self.player.health, self.player.energy, self.player.speed}')
+		# debug(f'Player Stats {self.player.health, self.player.energy, self.player.speed}')
 
 	def intro_state(self):
 		if self.state == 'intro':
