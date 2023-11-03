@@ -5,6 +5,7 @@ from random import choice
 
 class AnimationPlayer:
     def __init__(self):
+        
         self.frames = {
             # magic
             'flame': import_folder('../graphics/particles/flame/frames'),
@@ -73,6 +74,7 @@ class ParticleEffect(pygame.sprite.Sprite):
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center=pos)
+        self.hitbox = self.rect.inflate(0,0)
 
     def animate(self):
         self.frame_index += self.animation_speed
