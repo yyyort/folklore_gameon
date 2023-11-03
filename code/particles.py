@@ -63,12 +63,12 @@ class AnimationPlayer:
         animation_frames = self.frames[animation_type]
         ParticleEffect(pos, animation_frames, groups)
 
-    def create_projectile(self, animation_type, pos, groups):
+    def create_projectile(self, animation_type, pos, groups, direction):
         animation_frames = self.frames[animation_type]
-        Projectile(pos, animation_frames, groups)
+        Projectile(pos, animation_frames, groups, direction)
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, pos, animation_frames, groups,direction):
+    def __init__(self, pos, animation_frames, groups, direction):
         super().__init__(groups)
         self.sprite_type = 'magic'
         self.frame_index = 0
@@ -80,7 +80,15 @@ class Projectile(pygame.sprite.Sprite):
 
     def animate(self):
         self.frame_index += self.animation_speed
-        self.rect.x += 5
+
+        if self.direction == 'right':
+            self.rect.x += 5
+        elif self.direction == 'left':
+            self.rect.x -= 5
+        elif self.direction == 'up':
+            self.rect.y -= 5
+        elif self.direction == 'down':
+            self.rect.y += 5
         if self.frame_index >= len(self.frames):
             self.kill()
         else:

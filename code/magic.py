@@ -74,18 +74,17 @@ class MagicPlayer:
 		elif player.status.split('_')[0] == 'left': direction = pygame.math.Vector2(-1,0)
 		elif player.status.split('_')[0] == 'up': direction = pygame.math.Vector2(0,-1)
 		else: direction = pygame.math.Vector2(0,1)
-
 		#move the projectile
 		for i in range(1,6):
 			if direction.x: #horizontal
 				x = player.rect.centerx + i 
 				y = player.rect.centery + i 
-				dir
-				self.animation_player.create_projectile('flame',(x,y),groups, direction)
+				
+				self.animation_player.create_projectile('flame',(x,y),groups, player.status.split('_')[0])
 			else: # vertical
 				x = player.rect.centerx + i 
 				y = player.rect.centery + i
-				self.animation_player.create_projectile('flame',(x,y),groups, direction)
+				self.animation_player.create_projectile('flame',(x,y),groups, player.status.split('_')[0])
 		
 				
 	
