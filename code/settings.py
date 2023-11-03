@@ -64,7 +64,9 @@ weapon_data = {
 # magic
 magic_data = {
 	'flame': {'strength': 5,'cost': 20,'graphic':'../graphics/particles/flame/fire.png'},
-	'heal' : {'strength': 20,'cost': 10,'graphic':'../graphics/particles/heal/heal.png'}}
+	'heal' : {'strength': 20,'cost': 10,'graphic':'../graphics/particles/heal/heal.png'},
+    'normal': {'strength': 1,'cost': 1,'graphic':'../graphics/particles/flame/fire.png'},
+	}
 
 # enemy
 monster_data = {

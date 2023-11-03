@@ -42,7 +42,7 @@ class Level:
 		self.magic_player = MagicPlayer(self.animation_player)
 
 		#intro
-		self.state = 'end'
+		self.state = 'game'
 		self.intro = Intro()
 		self.end = End()
 
@@ -111,6 +111,10 @@ class Level:
 
 		if style == 'flame':
 			self.magic_player.flame(self.player,cost,[self.visible_sprites,self.attack_sprites])
+
+		#changed for skill
+		if style == 'normal':
+			self.magic_player.normal(self.player,cost,[self.visible_sprites,self.attack_sprites])
 
 	def destroy_attack(self):
 		if self.current_attack:
@@ -200,9 +204,10 @@ class Level:
 				self.visible_sprites.enemy_update(self.player)
 				self.player_attack_logic()
 			
-			if self.player.health <= 0:
+			#to be changed
+			""" if self.player.health <= 0:
 				self.state = 'end'
-				self.end.add_to_leaderboard(self.player)
+				self.end.add_to_leaderboard(self.player) """
 		
 		""" if self.state == 'end':
 			self.end.display(self.player)
