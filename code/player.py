@@ -217,8 +217,8 @@ class Player(Entity):
 			self.level += 1
 			self.exp_cap *= 1.25
 			self.exp -= self.exp
-
-			self.health = int(self.health * 1.25)
+			
+			# Only example
 			self.energy = int(self.energy * 1.25)
 			self.speed = int(self.speed * 1.25)
 
