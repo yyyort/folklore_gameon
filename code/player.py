@@ -95,6 +95,11 @@ class Player(Entity):
 			else:
 				self.direction.x = 0
 
+			if keys[pygame.K_LSHIFT]:
+				self.speed = self.sprint
+			else:
+				self.speed = self.stats['speed']
+
 			# attack input 
 			if keys[pygame.K_SPACE]:
 				self.attacking = True
@@ -228,6 +233,6 @@ class Player(Entity):
 		self.cooldowns()
 		self.get_status()
 		self.animate()
-		self.move(self.stats['speed'])
+		self.move(self.speed)
 		self.energy_recovery()
 		self.level_up()
