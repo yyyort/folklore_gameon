@@ -137,7 +137,22 @@ class Level:
 							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
 
 	def damage_player(self,amount,attack_type):
+
 		if self.player.vulnerable:
+			#changed for skill enemey attack effect
+			if attack_type == 'leaf_attack':
+				self.player.speed = 2
+				print(self.player.speed)
+				print(attack_type)
+			else:
+				self.player.speed = 5
+
+			if attack_type == 'slash':
+				#knockback effect
+				self.player.hitbox.x += 10
+				
+
+
 			self.player.health -= amount
 			self.player.vulnerable = False
 			self.player.hurt_time = pygame.time.get_ticks()

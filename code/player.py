@@ -58,6 +58,7 @@ class Player(Entity):
 		self.weapon_attack_sound = pygame.mixer.Sound('../audio/sword.wav')
 		self.weapon_attack_sound.set_volume(0.4)
 
+
 	def import_player_assets(self):
 		character_path = '../graphics/player/'
 		self.animations = {'up': [],'down': [],'left': [],'right': [],
@@ -214,5 +215,5 @@ class Player(Entity):
 		self.cooldowns()
 		self.get_status()
 		self.animate()
-		self.move(self.stats['speed'])
+		self.move(self.speed)
 		self.energy_recovery()

@@ -98,7 +98,6 @@ class Projectile(pygame.sprite.Sprite):
         self.animate()
 
 
-
 class ParticleEffect(pygame.sprite.Sprite):
     def __init__(self, pos, animation_frames, groups):
         super().__init__(groups)

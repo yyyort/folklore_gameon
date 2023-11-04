@@ -9,6 +9,9 @@ class Enemy(Entity):
 		# general setup
 		super().__init__(groups)
 		self.sprite_type = 'enemy'
+		
+		#added
+		self.display_surface = pygame.display.get_surface()			
 
 		# graphics setup
 		self.import_graphics(monster_name)
@@ -143,12 +146,22 @@ class Enemy(Entity):
 		if not self.vulnerable:
 			self.direction *= -self.resistance
 
+	def show_health_bar(self,display_surface):
+		bg_rect = pygame.Rect(self.rect.x,self.rect.y - 10,self.rect.width,5)
+		pygame.draw.rect(display_surface,UI_BG_COLOR,bg_rect)
+		ratio = self.health / monster_data[self.monster_name]['health']
+		current_width = bg_rect.width * ratio
+		current_rect = bg_rect.copy()
+		current_rect.width = current_width
+		pygame.draw.rect(display_surface,HEALTH_COLOR,current_rect)
+
 	def update(self):
 		self.hit_reaction()
 		self.move(self.speed)
 		self.animate()
 		self.cooldowns()
 		self.check_death()
+		self.show_health_bar(self.display_surface)
 
 	def enemy_update(self,player):
 		self.get_status(player)
