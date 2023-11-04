@@ -2,9 +2,10 @@ import pygame as pg
 from settings import *
 
 # Importing Classes
-from tile import Boundary
+from tile import Boundary, Boundary_Mini
 from player import Player
 from intro import Intro
+from support import import_csv_layout
 
 class Level():
     def __init__(self):
@@ -13,20 +14,34 @@ class Level():
         self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pg.sprite.Group()
         
+        self.create_map()
+        
         self.state = 'intro'
         self.intro = Intro()
         
-        self.create_map()
-        
     def create_map(self):
-            for row_index, row in enumerate(WORLD_MAP):
+        
+        layouts = {
+            'boundary' : import_csv_layout('../map/new_map_layout/map_bounderies_lower.csv'),
+            'boundary_mini' : import_csv_layout('../map/new_map_layout/map_bounderies_upper.csv'),
+            'entities' : import_csv_layout('../map/new_map_layout/map_entity_objects.csv'),
+        }
+        
+        for style, layout in layouts.items():
+            for row_index, row in enumerate(layout):
                 for col_index, col in enumerate(row):
-                    x = col_index * TILE_SIZE
-                    y = row_index * TILE_SIZE
-                    if col == 'x':
-                        Boundary((x, y), [self.visible_sprites, self.obstacle_sprites])
-                    elif col == 'y':
-                        self.player = Player((x, y), [self.visible_sprites])
+                    if col != '-1':
+                        x = col_index * TILE_SIZE  
+                        y = row_index * TILE_SIZE
+                        if style == 'boundary':
+                            Boundary((x, y), [self.obstacle_sprites])
+                        elif style == 'boundary_mini':
+                            Boundary_Mini((x, y), [self.obstacle_sprites])
+                        elif style == 'entities':
+                            if col == '394':
+                                self.player = Player((x, y), 
+                                                     [self.visible_sprites],
+                                                     self.obstacle_sprites)
                    
     def run(self):
         
@@ -53,8 +68,8 @@ class YSortCameraGroup(pg.sprite.Group):
 		self.offset = pg.math.Vector2()
 
 		# creating the floor
-		# self.floor_surf = pg.image.load('../graphics/tilemap/_map_partial_detailed_1.png').convert()
-		# self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
+		self.floor_surf = pg.image.load('../graphics/tilemap/map_image/map_1.png').convert()
+		self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
 
 	def custom_draw(self,player):
 
@@ -63,8 +78,8 @@ class YSortCameraGroup(pg.sprite.Group):
 		self.offset.y = player.rect.centery - self.half_height
 
 		# drawing the floor
-		# floor_offset_pos = self.floor_rect.topleft - self.offset
-		# self.display_surface.blit(self.floor_surf,floor_offset_pos)
+		floor_offset_pos = self.floor_rect.topleft - self.offset
+		self.display_surface.blit(self.floor_surf,floor_offset_pos)
 
 		# for sprite in self.sprites():
 		for sprite in sorted(self.sprites(),key = lambda sprite: sprite.rect.centery):

@@ -61,8 +61,11 @@ class Intro:
         input_rect = input_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2 + 20))
         self.display_surface.blit(input_surf,input_rect)
 
+        # If name is empty default should be "No_Name"
+
     def display_male(self):
-        image = pg.image.load('../graphics/test/player.png').convert_alpha()
+        image = pg.image.load('../graphics/player_alt/down_idle/down_idle_0.png').convert_alpha()
+        image = pg.transform.scale(image, (64, 64))
         image_rect = image.get_rect(center = (self.display_surface.get_size()[0]//2 - 50,self.display_surface.get_size()[1]//2 + 100))
         self.display_surface.blit(image,image_rect)
         
