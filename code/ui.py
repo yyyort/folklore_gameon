@@ -9,8 +9,8 @@ class UI:
 		self.font = pygame.font.Font(UI_FONT,UI_FONT_SIZE)
 
 		# bar setup 
-		self.health_bar_rect = pygame.Rect(10,10,HEALTH_BAR_WIDTH,BAR_HEIGHT)
-		self.energy_bar_rect = pygame.Rect(10,34,ENERGY_BAR_WIDTH,BAR_HEIGHT)
+		self.health_bar_rect = pygame.Rect(10, 10, HEALTH_BAR_WIDTH,BAR_HEIGHT)
+		self.energy_bar_rect = pygame.Rect(10, 34, ENERGY_BAR_WIDTH,BAR_HEIGHT)
 
 		# convert weapon dictionary
 		self.weapon_graphics = []
