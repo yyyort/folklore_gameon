@@ -5,6 +5,7 @@ from settings import *
 from tile import Boundary, Boundary_Mini
 from player import Player
 from intro import Intro
+from weapons import Weapon
 from support import import_csv_layout
 from debug import debug
 
@@ -14,6 +15,10 @@ class Level():
         
         self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pg.sprite.Group()
+        
+        self.current_attack = None
+        self.attack_sprites = pg.sprite.Group()
+        self.attackable_sprites = pg.sprite.Group()
         
         self.create_map()
         
@@ -42,22 +47,24 @@ class Level():
                             if col == '394':
                                 self.player = Player((x, y), 
                                                      [self.visible_sprites],
+                                                     self.create_attack,
+                                                     self.destroy_attack,
                                                      self.obstacle_sprites)
                    
     def run(self):
-        
         if self.state == 'intro':
             self.intro.display()
             if self.intro.start_button():
-                self.player.gender = self.intro.select
+                selected_gender = self.intro.select
+                self.player.get_character(selected_gender)
                 self.state = 'game'
                 
         elif self.state == 'game':
             self.visible_sprites.custom_draw(self.player)
     
-        self.visible_sprites.update()
+            self.visible_sprites.update()
         
-        debug(f'Current game state: {self.state}')
+        debug(f'Running: {self.player.running} Gender: {self.player.gender}')
         
     def reset(self):
         self.display_surface = pg.display.get_surface()
@@ -69,6 +76,14 @@ class Level():
         
         self.state = 'intro'
         self.intro = Intro()
+
+    def create_attack(self):
+        self.current_attack = Weapon(self.player,[self.visible_sprites, self.attack_sprites])
+
+    def destroy_attack(self):
+        if self.current_attack:
+            self.current_attack.kill()
+        self.current_attack = None
 
 class YSortCameraGroup(pg.sprite.Group):
 	def __init__(self):
