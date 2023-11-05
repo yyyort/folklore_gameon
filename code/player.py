@@ -247,14 +247,14 @@ class Player(Entity):
 			self.image.set_alpha(255)
 
 	def get_full_weapon_damage(self):
-		base_damage = self.stats['attack']
+		base_damage = self.stats['damage']
 		weapon_damage = weapon_data[self.weapon]['damage']
-		return base_damage + weapon_damage
+		return base_damage * weapon_damage
 
 	def get_full_magic_damage(self):
-		base_damage = self.stats['magic']
+		base_damage = self.stats['regen']
 		spell_damage = magic_data[self.magic]['strength']
-		return base_damage + spell_damage
+		return base_damage * spell_damage
 
 	def get_value_by_index(self,index):
 		return list(self.stats.values())[index]
@@ -272,11 +272,7 @@ class Player(Entity):
 		if self.exp >= self.exp_cap:
 			self.level += 1
 			self.exp_cap *= 1.25
-			self.exp -= self.exp
-			
-			# Only example
-			self.energy = int(self.energy * 1.25)
-			self.speed = int(self.speed * 1.25)
+			self.exp = self.sub_stats['exp']
 
 	def update(self):
 		self.import_player_assets()

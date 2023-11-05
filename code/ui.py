@@ -9,8 +9,8 @@ class UI:
 		self.font = pygame.font.Font(UI_FONT,UI_FONT_SIZE)
 
 		# bar setup 
-		self.health_bar_rect = pygame.Rect(10, 10, HEALTH_BAR_WIDTH,BAR_HEIGHT)
-		self.stamina_bar_rect = pygame.Rect(10, 34, ENERGY_BAR_WIDTH,BAR_HEIGHT)
+		self.health_bar_rect = pygame.Rect(10, 10, HEALTH_BAR, BAR_HEIGHT)
+		self.stamina_bar_rect = pygame.Rect(10, 34, ENERGY_BAR, BAR_HEIGHT)
 
 		# convert weapon dictionary
 		self.weapon_graphics = []
@@ -60,6 +60,16 @@ class UI:
 		self.display_surface.blit(text_surf,text_rect)
 		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
 
+	def show_hitpoints(self, hitpoint, max_hitpoint):
+		text_surf = self.font.render(f'Hitpoint:{hitpoint}/{max_hitpoint}',False,TEXT_COLOR)
+		x = 10
+		y = 10
+		text_rect = text_surf.get_rect(topleft = (x,y))
+  
+		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20, 20))
+		self.display_surface.blit(text_surf, text_rect)
+		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR, text_rect.inflate(20,20),3)
+      
 	def selection_box(self,left,top, has_switched):
 		bg_rect = pygame.Rect(left,top,ITEM_BOX_SIZE,ITEM_BOX_SIZE)
 		pygame.draw.rect(self.display_surface,UI_BG_COLOR,bg_rect)
@@ -84,8 +94,10 @@ class UI:
 		self.display_surface.blit(magic_surf,magic_rect)
 
 	def display(self,player):
-		self.show_bar(player.health, player.stats['health'],self.health_bar_rect,HEALTH_COLOR)
-		self.show_bar(player.stamina, player.stats['stamina'],self.stamina_bar_rect,ENERGY_COLOR)
+#		self.show_bar(player.health, player.stats['health'],self.health_bar_rect,HEALTH_COLOR)
+#		self.show_bar(player.stamina, player.stats['stamina'],self.stamina_bar_rect,ENERGY_COLOR)
+
+		self.show_hitpoints(player.health, player.stats['health'])
 
 		self.show_exp(player.level, player.exp, player.exp_cap)
 		self.show_score(player.score)
