@@ -1,32 +1,58 @@
-import pygame as pg
-from sys import exit
-
+import pygame, sys
 from settings import *
-from game import Game
+from level import Level
+from intro import Intro
 
-class Main:
-    def __init__(self):
-        pg.init()
-        self.display = pg.display.set_mode((d_width, d_height))
-        pg.display.set_caption('Folk-Lore')
-        self.clock = pg.time.Clock()
-        
-        self.game = Game()
-        
-    def run(self):
-        while True:
-            self.display.fill((125, 125, 125))
-            
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    exit()
-                    
-            self.game.run()
-                    
-            self.clock.tick(fps)
-            pg.display.flip()
-            
+class Game:
+	def __init__(self):
+
+		# general setup
+		pygame.init()
+		self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
+		pygame.display.set_caption('Zelda')
+		self.clock = pygame.time.Clock()
+
+		self.level = Level()
+
+		# sound 
+		main_sound = pygame.mixer.Sound('../audio/main.ogg')
+		main_sound.set_volume(0)
+		#main_sound.set_volume(0.5)
+		main_sound.play(loops = -1)
+	
+	def run(self):
+		while True:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					pygame.quit()
+					sys.exit()
+				if self.level.game_state == 'intro':
+					if event.type == pygame.KEYDOWN:
+						if event.key == pygame.K_BACKSPACE:
+							self.level.intro.input = self.level.intro.input[:-1]
+						else:
+							self.level.intro.input += event.unicode
+
+			if self.level.game_state == 'intro':
+				self.screen.fill(WATER_COLOR)
+				self.level.intro_state()
+
+			if self.level.game_state == 'end':
+				self.screen.fill(WATER_COLOR)
+				self.level.end_state()
+
+			if self.level.game_state == 'game':
+				self.screen.fill(WATER_COLOR)
+				self.level.run()
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_m:
+						self.level.toggle_menu()
+
+			#self.screen.fill(WATER_COLOR)
+			#self.level.run()
+			pygame.display.update()
+			self.clock.tick(FPS)
+
 if __name__ == '__main__':
-    main = Main()
-    main.run()
+	game = Game()
+	game.run()
