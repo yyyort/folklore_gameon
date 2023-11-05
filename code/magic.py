@@ -42,7 +42,7 @@ class MagicPlayer:
 					y = player.rect.centery + offset_y + randint(-TILESIZE // 3, TILESIZE // 3)
 					self.animation_player.create_particles('flame',(x,y),groups)
 
-	def projectile(self, player, cost, groups):
+	""" def projectile(self, player, cost, groups):
 		self.sounds['flame'].play()
 
 		if player.status.split('_')[0] == 'right': direction = pygame.math.Vector2(1,0)
@@ -59,10 +59,7 @@ class MagicPlayer:
 			else: # vertical
 				x = player.rect.centerx + 1
 				y = player.rect.centery + 1
-				self.animation_player.create_particles('flame',(x,y),groups)
-
-
-
+				self.animation_player.create_particles('flame',(x,y),groups) """
 
 	#changed for skill
 	def normal(self, player,cost,groups):
@@ -87,4 +84,3 @@ class MagicPlayer:
 				self.animation_player.create_projectile('flame',(x,y),groups, player.status.split('_')[0])
 		
 				
-	

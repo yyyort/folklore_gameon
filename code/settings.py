@@ -17,6 +17,7 @@ ITEM_BOX_SIZE = 80
 UI_FONT = '../graphics/font/joystix.ttf'
 UI_FONT_SIZE = 18
 
+
 # general colors
 WATER_COLOR = '#71ddee'
 UI_BG_COLOR = '#222222'
@@ -67,6 +68,11 @@ magic_data = {
 	'heal' : {'strength': 20,'cost': 10,'graphic':'../graphics/particles/heal/heal.png'},
     'normal': {'strength': 1,'cost': 1,'graphic':'../graphics/particles/flame/fire.png'},
 	}
+
+#item
+item_data = {
+	'molotov': {'strength': 5,'cost': 1,'graphic':'../graphics/particles/molotov/molotov.png'},
+}
 
 # enemy
 monster_data = {

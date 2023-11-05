@@ -1,16 +1,25 @@
 import pygame 
+#utilities
 from settings import *
 from tile import Tile
-from player import Player
 from debug import debug
 from support import *
 from random import choice, randint
-from weapon import Weapon
 from ui import UI
-from enemy import Enemy
 from particles import AnimationPlayer
+
+#player
+from player import Player
+from weapon import Weapon
 from magic import MagicPlayer
+from item import ItemPlayer
 from upgrade import Upgrade
+
+#enemy
+from enemy import Enemy
+
+
+#game states
 from intro import Intro
 from end import End
 
@@ -40,6 +49,10 @@ class Level:
 		# particles
 		self.animation_player = AnimationPlayer()
 		self.magic_player = MagicPlayer(self.animation_player)
+		self.item_player = ItemPlayer(self.animation_player)
+
+		#enemy
+		self.enemy = []
 
 		#phases
 		self.state = 'game'
@@ -86,7 +99,8 @@ class Level:
 									self.obstacle_sprites,
 									self.create_attack,
 									self.destroy_attack,
-									self.create_magic)
+									self.create_magic,
+									self.use_item,)
 							else:
 								if col == '390': monster_name = 'bamboo'
 								elif col == '391': monster_name = 'spirit'
@@ -101,6 +115,7 @@ class Level:
 									self.trigger_death_particles,
 									self.add_exp)
 
+	#player function
 	def create_attack(self):
 		
 		self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
@@ -115,6 +130,10 @@ class Level:
 		#changed for skill
 		if style == 'normal':
 			self.magic_player.normal(self.player,cost,[self.visible_sprites,self.attack_sprites])
+
+	def use_item(self,style,strength,cost):
+		if style == 'molotov':
+			self.item_player.molotov(self.player,cost,[self.visible_sprites,self.attack_sprites]) 
 
 	def destroy_attack(self):
 		if self.current_attack:
@@ -134,15 +153,24 @@ class Level:
 							for leaf in range(randint(3,6)):
 								self.animation_player.create_grass_particles(pos - offset,[self.visible_sprites])
 							target_sprite.kill()
-						elif attack_sprite.sprite_type == 'magic':
-							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
-							attack_sprite.kill()
 						else:
 							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
+							if attack_sprite.sprite_type == 'magic':
+								target_sprite.get_damage(self.player,attack_sprite.sprite_type)
+								attack_sprite.kill()
+							
+							#change molotov effect
+							if attack_sprite.sprite_type == 'molotov':
+								pos = target_sprite.rect.center
+								offset = pygame.math.Vector2(0,75)
+								self.animation_player.create_particles('molotov',pos,self.visible_sprites)
+								target_sprite.get_damage(self.player,attack_sprite.sprite_type)
+							
 
+	#enemy function
 	def damage_effect(self,attack_type):
 		if attack_type == 'leaf_attack':
-			self.player.debuff('slow',3,10000)
+			self.player.debuff('slow',3,10000) #slow for 10 seconds
 
 
 	def damage_player(self,amount,attack_type):
@@ -162,10 +190,12 @@ class Level:
 
 		self.player.exp += amount
 
+	#ui function
 	def toggle_menu(self):
 
 		self.game_paused = not self.game_paused 
 
+	#game state function
 	def reset(self):
 		#reset everthing
 		# get the display surface 
@@ -197,16 +227,9 @@ class Level:
 		self.end = End()
 
 	def run(self):
-		""" if self.state == 'intro':
-			self.intro.display()
-			if self.intro.start_button():
-				self.player.name = self.intro.input
-				self.player.gender = self.intro.select
-				self.state = 'game' """
-
 		if self.state == 'game':
 			self.visible_sprites.custom_draw(self.player)
-			self.ui.display(self.player)
+			self.ui.display(self.player, self.enemy)
 			print(self.player.debuffs)
 			
 			if self.game_paused:
@@ -220,11 +243,6 @@ class Level:
 			""" if self.player.health <= 0:
 				self.state = 'end'
 				self.end.add_to_leaderboard(self.player) """
-		
-		""" if self.state == 'end':
-			self.end.display(self.player)
-			if self.end.restart_button():
-				self.state = 'intro' """
 
 	def intro_state(self):
 		if self.state == 'intro':

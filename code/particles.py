@@ -6,6 +6,9 @@ from random import choice
 class AnimationPlayer:
     def __init__(self):
         self.frames = {
+            #items
+            'molotov': import_folder('../graphics/particles/molotov/frames'),
+
             # magic
             'flame': import_folder('../graphics/particles/flame/frames'),
             'aura': import_folder('../graphics/particles/aura'),
@@ -65,12 +68,12 @@ class AnimationPlayer:
 
     def create_projectile(self, animation_type, pos, groups, direction):
         animation_frames = self.frames[animation_type]
-        Projectile(pos, animation_frames, groups, direction)
+        Projectile(pos, animation_frames, groups, direction, animation_type)
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, pos, animation_frames, groups, direction):
+    def __init__(self, pos, animation_frames, groups, direction, type):
         super().__init__(groups)
-        self.sprite_type = 'magic'
+        self.sprite_type = type
         self.frame_index = 0
         self.animation_speed = 0.15
         self.frames = animation_frames
@@ -90,6 +93,7 @@ class Projectile(pygame.sprite.Sprite):
         elif self.direction == 'down':
             self.rect.y += 5
         if self.frame_index >= len(self.frames):
+            #ParticleEffect(self.rect.center, self.frames, self.groups())
             self.kill()
         else:
             self.image = self.frames[int(self.frame_index)]

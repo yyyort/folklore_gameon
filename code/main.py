@@ -51,6 +51,7 @@ class Game:
 			#self.screen.fill(WATER_COLOR)
 			#self.level.run()
 			pygame.display.update()
+			pygame.display.flip()
 			self.clock.tick(FPS)
 
 if __name__ == '__main__':

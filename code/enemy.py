@@ -9,19 +9,18 @@ class Enemy(Entity):
 		# general setup
 		super().__init__(groups)
 		self.sprite_type = 'enemy'
-		
-		#added
-		self.display_surface = pygame.display.get_surface()			
 
 		# graphics setup
 		self.import_graphics(monster_name)
 		self.status = 'idle'
 		self.image = self.animations[self.status][self.frame_index]
+		self.display_surface = pygame.display.get_surface()
 
 		# movement
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.inflate(0,-10)
 		self.obstacle_sprites = obstacle_sprites
+
 
 		# stats
 		self.monster_name = monster_name
@@ -55,6 +54,12 @@ class Enemy(Entity):
 		self.death_sound.set_volume(0.6)
 		self.hit_sound.set_volume(0.6)
 		self.attack_sound.set_volume(0.6)
+
+		self.max_health = monster_info['health'] # Store the maximum health
+		self.health_bar_width = 50
+		self.health_bar_height = 10
+		self.health_bar_rect = pygame.Rect(0, 0, self.health_bar_width, self.health_bar_height)
+		self.health_bar_color = (0, 255, 0)
 
 	def import_graphics(self,name):
 		self.animations = {'idle':[],'move':[],'attack':[]}
@@ -146,14 +151,48 @@ class Enemy(Entity):
 		if not self.vulnerable:
 			self.direction *= -self.resistance
 
-	def show_health_bar(self,display_surface):
-		bg_rect = pygame.Rect(self.rect.x,self.rect.y - 10,self.rect.width,5)
-		pygame.draw.rect(display_surface,UI_BG_COLOR,bg_rect)
-		ratio = self.health / monster_data[self.monster_name]['health']
-		current_width = bg_rect.width * ratio
-		current_rect = bg_rect.copy()
-		current_rect.width = current_width
-		pygame.draw.rect(display_surface,HEALTH_COLOR,current_rect)
+	def draw_health_bar(self):
+		if self.health < self.max_health:
+			# Create a separate surface for the health bar
+			health_bar_surface = pygame.Surface((self.health_bar_width, self.health_bar_height))
+			health_bar_surface.set_alpha(255)
+
+			# Calculate health ratio
+			ratio = self.health / self.max_health
+
+			# Calculate width of red bar
+			current_width = self.health_bar_width * ratio
+			current_rect = pygame.Rect(0, 0, current_width, self.health_bar_height)
+
+			# Draw the red bar on the health bar surface
+			pygame.draw.rect(health_bar_surface, (255, 0, 0), current_rect)
+
+			# Draw the black border on the health bar surface
+			border_rect = pygame.Rect(0, 0, self.health_bar_width, self.health_bar_height)
+			border_rect.width += 2
+			border_rect.height += 2
+			pygame.draw.rect(health_bar_surface, (0, 0, 0), border_rect, 1)
+
+			# Blit the health bar surface onto the enemy's image
+			self.image.blit(health_bar_surface, self.health_bar_rect)
+
+
+
+
+
+
+	""" def draw_health_bar(self):
+		if self.health < self.max_health:
+			# Calculate health ratio
+			ratio = self.health / self.max_health
+			# Calculate width of bar
+			current_width = self.health_bar_width * ratio
+			current_rect = self.health_bar_rect.copy()
+			current_rect.width = current_width
+			# Draw health bar
+			pygame.draw.rect(self.image, self.health_bar_color, current_rect)
+			pygame.draw.rect(self.image, UI_BORDER_COLOR, self.health_bar_rect, 1) """
+
 
 	def update(self):
 		self.hit_reaction()
@@ -161,7 +200,8 @@ class Enemy(Entity):
 		self.animate()
 		self.cooldowns()
 		self.check_death()
-		self.show_health_bar(self.display_surface)
+		self.draw_health_bar()
+		
 
 	def enemy_update(self,player):
 		self.get_status(player)
