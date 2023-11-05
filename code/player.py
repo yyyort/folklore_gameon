@@ -46,7 +46,7 @@ class Player(Entity):
 		self.upgrade_cost = {'health': 100, 'energy': 100, 'attack': 100, 'magic' : 100, 'speed': 100}
 		self.health = self.stats['health'] * 0.5
 		self.energy = self.stats['energy'] * 0.8
-		self.exp = 5000
+		self.exp = 0
 		self.speed = self.stats['speed']
 
 		# damage timer
@@ -58,6 +58,31 @@ class Player(Entity):
 		self.weapon_attack_sound = pygame.mixer.Sound('../audio/sword.wav')
 		self.weapon_attack_sound.set_volume(0.4)
 
+		#debuff
+		self.debuffs = []
+		self.debuff_time = 0
+		self.debuff_duration = 0
+
+		
+	def debuff(self, debuff_type, amount, duration):
+		if debuff_type == 'slow':
+			self.debuff_time = pygame.time.get_ticks()
+			self.debuff_duration = duration
+			if self.debuff_duration > 0:
+				self.speed = amount
+				if not debuff_type in self.debuffs:
+					self.debuffs.append(debuff_type)
+				
+
+
+	def debuff_logic(self):
+		if self.debuffs:
+			for debuff in self.debuffs:
+				current_time = pygame.time.get_ticks()
+				if current_time - self.debuff_time >= self.debuff_duration:
+					self.debuffs.remove(debuff)
+					self.speed = self.stats['speed']
+		
 
 	def import_player_assets(self):
 		character_path = '../graphics/player/'
@@ -217,3 +242,4 @@ class Player(Entity):
 		self.animate()
 		self.move(self.speed)
 		self.energy_recovery()
+		self.debuff_logic()

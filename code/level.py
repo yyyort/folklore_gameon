@@ -41,7 +41,7 @@ class Level:
 		self.animation_player = AnimationPlayer()
 		self.magic_player = MagicPlayer(self.animation_player)
 
-		#intro
+		#phases
 		self.state = 'game'
 		self.intro = Intro()
 		self.end = End()
@@ -127,32 +127,28 @@ class Level:
 				collision_sprites = pygame.sprite.spritecollide(attack_sprite,self.attackable_sprites,False)
 				if collision_sprites:
 					for target_sprite in collision_sprites:
+
 						if target_sprite.sprite_type == 'grass':
 							pos = target_sprite.rect.center
 							offset = pygame.math.Vector2(0,75)
 							for leaf in range(randint(3,6)):
 								self.animation_player.create_grass_particles(pos - offset,[self.visible_sprites])
 							target_sprite.kill()
+						elif attack_sprite.sprite_type == 'magic':
+							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
+							attack_sprite.kill()
 						else:
 							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
 
-	def damage_player(self,amount,attack_type):
+	def damage_effect(self,attack_type):
+		if attack_type == 'leaf_attack':
+			self.player.debuff('slow',3,10000)
 
+
+	def damage_player(self,amount,attack_type):
 		if self.player.vulnerable:
 			#changed for skill enemey attack effect
-			if attack_type == 'leaf_attack':
-				self.player.speed = 2
-				print(self.player.speed)
-				print(attack_type)
-			else:
-				self.player.speed = 5
-
-			if attack_type == 'slash':
-				#knockback effect
-				self.player.hitbox.x += 10
-				
-
-
+			self.damage_effect(attack_type)
 			self.player.health -= amount
 			self.player.vulnerable = False
 			self.player.hurt_time = pygame.time.get_ticks()
@@ -211,6 +207,7 @@ class Level:
 		if self.state == 'game':
 			self.visible_sprites.custom_draw(self.player)
 			self.ui.display(self.player)
+			print(self.player.debuffs)
 			
 			if self.game_paused:
 				self.upgrade.display()
