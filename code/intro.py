@@ -10,17 +10,15 @@ class Intro:
         self.click_time = None
         self.can_click = True
 
-        print ("Intro")
-
     def click_cooldown(self):
         if not self.can_click:
             current_time = pg.time.get_ticks()
             if current_time - self.click_time >= 300:
                 self.can_click = True
 
-    def show_text(self,text):
-        text_surf = self.font.render(text,False,TEXT_COLOR[0])
-        text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2))
+    def title_text(self):
+        text_surf = self.font.render("FOLK - LORE",False,TEXT_COLOR[0])
+        text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2-200))
         self.display_surface.blit(text_surf,text_rect)
 
     def start_button(self):
@@ -109,6 +107,7 @@ class Intro:
         self.display_surface.blit(speed,speed_rect)
 
     def display(self):
+        self.title_text()
         self.input_name()
         self.display_male()
         self.display_female()

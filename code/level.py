@@ -6,6 +6,7 @@ from tile import Boundary, Boundary_Mini
 from player import Player
 from intro import Intro
 from support import import_csv_layout
+from debug import debug
 
 class Level():
     def __init__(self):
@@ -53,9 +54,21 @@ class Level():
                 
         elif self.state == 'game':
             self.visible_sprites.custom_draw(self.player)
-        
     
         self.visible_sprites.update()
+        
+        debug(f'Current game state: {self.state}')
+        
+    def reset(self):
+        self.display_surface = pg.display.get_surface()
+        
+        self.visible_sprites = YSortCameraGroup()
+        self.obstacle_sprites = pg.sprite.Group()
+        
+        self.create_map()
+        
+        self.state = 'intro'
+        self.intro = Intro()
 
 class YSortCameraGroup(pg.sprite.Group):
 	def __init__(self):

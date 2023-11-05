@@ -16,10 +16,13 @@ class Game:
         
     def run(self):
         while True:
+            keys = pg.key.get_pressed()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
                     exit()
+                if keys[pg.K_p]:
+                    self.level.reset()
             self.display.fill((0, 0, 0))
             
             self.level.run()
