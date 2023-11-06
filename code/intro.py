@@ -6,7 +6,7 @@ class Intro:
         self.display_surface = pg.display.get_surface()
         self.font = pg.font.Font(UI_FONT, UI_FONT_SIZE)
         
-        self.name = ''
+        self.alias = ''
         self.character = ''
         
         self.can_click = True
@@ -57,7 +57,7 @@ class Intro:
         text_surf = self.font.render('Enter your name:',False,TEXT_COLOR)
         text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2))
         self.display_surface.blit(text_surf,text_rect)
-        input_surf = self.font.render(self.name,False,TEXT_COLOR)
+        input_surf = self.font.render(self.alias,False,TEXT_COLOR)
         input_rect = input_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2 + 20))
         self.display_surface.blit(input_surf,input_rect)
 

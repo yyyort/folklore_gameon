@@ -77,6 +77,10 @@ magic_data = {
 	'heal' : {'strength': 20,'cost': 10,'graphic':'../graphics/particles/heal/heal.png'}
  }
 
+item_data = {
+	'molotov' : {'strength': 5,'cost': 5,'graphic':'../graphics/particles/flame/fire.png'}
+}
+
 # enemy
 monster_data = {
 	'squid': {'health': 100, 'exp':25, 'score': 10, 'damage':20,'attack_type': 'slash', 'attack_sound':'../audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 360},

@@ -7,6 +7,10 @@ class AnimationPlayer:
     def __init__(self):
         
         self.frames = {
+            #item:
+            'molotov': import_folder('../graphics/particles/flame/frames'),
+            
+            
             # magic
             'flame': import_folder('../graphics/particles/flame/frames'),
             'aura': import_folder('../graphics/particles/aura'),
@@ -64,6 +68,41 @@ class AnimationPlayer:
         animation_frames = self.frames[animation_type]
         ParticleEffect(pos, animation_frames, groups)
 
+    def create_projectile(self, animation_type, pos, groups, direction):
+        animation_frames = self.frames[animation_type]
+        Projectile(pos, animation_frames, groups, direction, animation_type)
+
+class Projectile(pygame.sprite.Sprite):
+    def __init__(self, pos, animation_frames, groups, direction, type):
+        super().__init__(groups)
+        self.sprite_type = type
+        self.frame_index = 0
+        self.animation_speed = 0.15
+        self.frames = animation_frames
+        self.image = self.frames[self.frame_index]
+        self.rect = self.image.get_rect(center=pos)
+        self.hitbox = self.rect.inflate(0, 0)
+        self.direction = direction
+        
+    def animate(self):
+        self.frame_index += self.animation_speed
+
+        if self.direction == 'right':
+            self.rect.x += 5
+        elif self.direction == 'left':
+            self.rect.x -= 5
+        elif self.direction == 'up':
+            self.rect.y -= 5
+        elif self.direction == 'down':
+            self.rect.y += 5
+        if self.frame_index >= len(self.frames):
+            # ParticleEffect(self.rect.center, self.frames, self.groups())
+            self.kill()
+        else:
+            self.image = self.frames[int(self.frame_index)]
+
+    def update(self):
+        self.animate()
 
 class ParticleEffect(pygame.sprite.Sprite):
     def __init__(self, pos, animation_frames, groups):

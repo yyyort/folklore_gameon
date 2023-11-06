@@ -1,6 +1,6 @@
 import pygame 
 from settings import *
-from tile import Tile, Boundary, Mini
+from tile import Tile
 from player import Player
 from debug import debug
 from support import *
@@ -12,6 +12,7 @@ from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade
 from intro import Intro
+from item import ItemPlayer
 from end import End
 
 class Level:
@@ -40,6 +41,7 @@ class Level:
 		# particles
 		self.animation_player = AnimationPlayer()
 		self.magic_player = MagicPlayer(self.animation_player)
+		self.item_player = ItemPlayer(self.animation_player)
 
 		#intro
 		self.game_state = 'intro'
@@ -50,8 +52,6 @@ class Level:
 		layouts = {
 			'outer_wall': import_csv_layout('../map/new_map_layout/map_bounderies_lower.csv'),
 			'inner_wall': import_csv_layout('../map/new_map_layout/map_bounderies_upper.csv'),
-			# 'grass': import_csv_layout('../map/map_Grass.csv'),
-			# 'object': import_csv_layout('../map/map_Objects.csv'),
 			'entities': import_csv_layout('../map/new_map_layout/map_entity_objects.csv')
 		}
 		graphics = {
@@ -88,7 +88,8 @@ class Level:
 									self.obstacle_sprites,
 									self.create_attack,
 									self.destroy_attack,
-									self.create_magic)
+									self.create_magic,
+         							self.use_item)
 							else:
 								if col != '-1':
 									if col == '390': monster_name = 'bamboo'
@@ -115,6 +116,10 @@ class Level:
 
 		if style == 'flame':
 			self.magic_player.flame(self.player,cost,[self.visible_sprites,self.attack_sprites])
+
+	def use_item(self,style,strength,cost):
+		if style == 'molotov':
+			self.item_player.molotov(self.player,cost,[self.visible_sprites,self.attack_sprites])
 
 	def destroy_attack(self):
 		if self.current_attack:
@@ -194,7 +199,8 @@ class Level:
 			self.intro.display()
 			if self.intro.start_button():
 				selected_character = self.intro.character
-				self.player.get_character(selected_character)
+				selected_alis = self.intro.alias
+				self.player.get_character(selected_character, selected_alias)
 				if selected_character != '':
 					self.game_state = 'game'
 
@@ -225,7 +231,8 @@ class Level:
 			self.intro.display()
 			if self.intro.start_button():
 				selected_character = self.intro.character
-				self.player.get_character(selected_character)
+				selected_alias = self.intro.alias
+				self.player.get_character(selected_character, selected_alias)
 				if selected_character != '':
 					self.game_state = 'game'
 				
@@ -244,7 +251,7 @@ class YSortCameraGroup(pygame.sprite.Group):
 		super().__init__()
 		self.display_surface = pygame.display.get_surface()
 		self.half_width = self.display_surface.get_size()[0] // 2
-		self.half_height = self.display_surface.get_size()[1] // 2
+		self.half_height = self.display_surface.get_size()[1] // 2 
 		self.offset = pygame.math.Vector2()
 
 		# creating the floor

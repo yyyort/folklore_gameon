@@ -29,9 +29,9 @@ class Game:
 				if self.level.game_state == 'intro':
 					if event.type == pygame.KEYDOWN:
 						if event.key == pygame.K_BACKSPACE:
-							self.level.intro.name = self.level.intro.name[:-1]
+							self.level.intro.alias = self.level.intro.alias[:-1]
 						else:
-							self.level.intro.name += event.unicode
+							self.level.intro.alias += event.unicode
 
 			if self.level.game_state == 'intro':
 				self.screen.fill(WATER_COLOR)

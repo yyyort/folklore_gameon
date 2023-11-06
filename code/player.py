@@ -4,7 +4,7 @@ from support import import_folder
 from entity import Entity
 
 class Player(Entity):
-	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic):
+	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic,use_item):
 		super().__init__(groups)
 		self.image = pygame.image.load('../graphics/player_alt/down_idle/down_idle.png').convert_alpha()
 		self.image = pygame.transform.scale(self.image, (64, 64))
@@ -12,6 +12,7 @@ class Player(Entity):
 		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
 
 		#info
+		self.alias = ''
 		self.character = ''
 		self.character_path = ''
   
@@ -40,6 +41,12 @@ class Player(Entity):
 		self.magic = list(magic_data.keys())[self.magic_index]
 		self.can_switch_magic = True
 		self.magic_switch_time = None
+
+		self.use_item = use_item
+		self.item_index = 0
+		self.item = list(item_data.keys())[self.item_index]
+		self.can_switch_item = True
+		self.item_switch_time = None
 
 		self.stats = player_data['']
   
@@ -151,6 +158,14 @@ class Player(Entity):
 				strength = list(magic_data.values())[self.magic_index]['strength'] + self.stats['stamina']
 				cost = list(magic_data.values())[self.magic_index]['cost']
 				self.create_magic(style,strength,cost)
+    
+			if keys[pygame.K_f]:
+				self.attacking = True
+				self.attack_time = pygame.time.get_ticks()
+				style = list(item_data.keys())[self.item_index]
+				strength = list(item_data.values())[self.item_index]['strength'] + self.stats['stamina']
+				cost = list(item_data.values())[self.item_index]['cost']
+				self.use_item(style, strength, cost)
 
 			if keys[pygame.K_q] and self.can_switch_weapon:
 				self.can_switch_weapon = False
@@ -174,6 +189,16 @@ class Player(Entity):
 
 				self.magic = list(magic_data.keys())[self.magic_index]
 
+			if keys[pygame.K_r] and self.can_switch_item:
+				self.can_switch_item = False
+				self.item_switch_time = pygame.time.get_ticks()
+				if self.item_index < len(list(item_data.keys())) - 1:
+					self.item_index += 1
+				else:
+					self.item_index = 0
+
+				self.item = list(item_data.keys())[self.item_index]
+
 	def get_status(self):
 		# idle status
 		if self.direction.x == 0 and self.direction.y == 0:
@@ -192,14 +217,14 @@ class Player(Entity):
 			if 'attack' in self.status:
 				self.status = self.status.replace('_attack','')
 
-	def get_character(self, selected_character):
+	def get_character(self, selected_character, selected_alias):
 		if selected_character == 'male':
-#			self.character_name = player_name
+			self.alias = selected_alias
 			self.character = selected_character
 			self.character_path = '../graphics/player_alt/'
 			self.stats = player_data[selected_character]
 		elif selected_character == 'female':
-#			self.character_name = player_name
+			self.alias = selected_alias
 			self.character = selected_character
 			self.character_path = '../graphics/player/'
 			self.stats = player_data[selected_character]
@@ -225,6 +250,10 @@ class Player(Entity):
 		if not self.can_switch_magic:
 			if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
 				self.can_switch_magic = True
+
+		if not self.can_switch_item:
+			if current_time - self.item_switch_time >= self.switch_duration_cooldown:
+				self.can_switch_item = True
 
 		if not self.vulnerable:
 			if current_time - self.hurt_time >= self.invulnerability_duration:
