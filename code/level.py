@@ -13,7 +13,8 @@ from player import Player
 from weapon import Weapon
 from magic import MagicPlayer
 from item import ItemPlayer
-from upgrade import Upgrade
+#from old_upgrade import Upgrade
+from new_upgrade import NewUpgrade
 
 #enemy
 from enemy import Enemy
@@ -44,7 +45,8 @@ class Level:
 
 		# user interface 
 		self.ui = UI()
-		self.upgrade = Upgrade(self.player)
+		#self.upgrade = Upgrade(self.player)
+		self.new_upgrade = NewUpgrade(self.player)
 
 		# particles
 		self.animation_player = AnimationPlayer()
@@ -193,6 +195,10 @@ class Level:
 	#ui function
 	def toggle_menu(self):
 
+		self.game_paused = not self.game_paused
+
+	def toggle_upgrade(self):
+		
 		self.game_paused = not self.game_paused 
 
 	#game state function
@@ -216,7 +222,8 @@ class Level:
 
 		# user interface 
 		self.ui = UI()
-		self.upgrade = Upgrade(self.player)
+		#self.upgrade = Upgrade(self.player)
+		self.new_upgrade = NewUpgrade(self.player)
 
 		# particles
 		self.animation_player = AnimationPlayer()
@@ -230,10 +237,11 @@ class Level:
 		if self.state == 'game':
 			self.visible_sprites.custom_draw(self.player)
 			self.ui.display(self.player, self.enemy)
-			print(self.player.debuffs)
+			#print(self.player.debuffs)
 			
 			if self.game_paused:
-				self.upgrade.display()
+				#self.upgrade.display()
+				self.new_upgrade.display()
 			else:
 				self.visible_sprites.update()
 				self.visible_sprites.enemy_update(self.player)

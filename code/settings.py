@@ -35,10 +35,50 @@ BAR_COLOR = '#EEEEEE'
 BAR_COLOR_SELECTED = '#111111'
 UPGRADE_BG_COLOR_SELECTED = '#EEEEEE'
 
+#new upgrade menu
+CARD_WIDTH = 200
+CARD_HEIGHT = 300
+CARD_BORDER = 5
+CARD_BORDER_COLOR = 'black'
+CARD_BORDER_COLOR_SELECTED = 'gold'
+CARD_BORDER_COLOR_ACTIVE = 'gold'
+CARD_BG_COLOR = 'white'
+CARD_BG_COLOR_SELECTED = 'gold'
+TEXT_COLOR = 'black'
+CARD_SPACING = 20
+
+
+
+
 TEXT_COLOR_HOVER = 'red'
 
-# player
+""" 
+player stat
+health
+defense
+attack
+speed
+ """
+
+#player
 male_player_data = {
+	'health': 100,
+    'energy':60,
+	'defense': 10,
+    'attack': 10,
+	'speed': 5,
+}
+
+female_player_data = {
+	'health': 80,
+    'energy':80,
+	'defense': 8,
+	'attack': 8,
+	'speed': 7,
+}
+
+# player
+""" male_player_data = {
     'health': 100,
     'energy':60,
     'attack': 10,
@@ -52,7 +92,7 @@ female_player_data = {
 	'attack': 8,
 	'magic': 6,
 	'speed': 7
-}
+} """
 
 # weapons 
 weapon_data = {
