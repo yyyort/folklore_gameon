@@ -56,7 +56,7 @@ class Enemy(Entity):
 		self.attack_sound.set_volume(0.6)
 
 	def import_graphics(self,name):
-		self.animations = {'idle':[],'move':[],'attack':[]}
+		self.animations = {'idle':[],'move':[],'attack':[], 'move_left':[], 'move_right':[]}
 		main_path = f'../graphics/monsters/{name}/'
 		for animation in self.animations.keys():
 			self.animations[animation] = import_folder(main_path + animation)
@@ -81,7 +81,16 @@ class Enemy(Entity):
 				self.frame_index = 0
 			self.status = 'attack'
 		elif distance <= self.notice_radius:
+			
+#			if player.rect.centerx > self.rect.centerx:
+#				self.status = 'move_right'  # Player is on the right.
+#			elif player.rect.centerx < self.rect.centerx:
+#				self.status = 'move_left'  # Player is on the left.
+#			else:
+#				self.status = 'move'  # Player is directly in front or behind.
+    
 			self.status = 'move'
+
 		else:
 			self.status = 'idle'
 
@@ -92,6 +101,12 @@ class Enemy(Entity):
 			self.attack_sound.play()
 		elif self.status == 'move':
 			self.direction = self.get_player_distance_direction(player)[1]
+   
+#		elif self.status == 'move_left':
+#			self.direction = self.get_player_distance_direction(player)[1]
+#		elif self.status == 'move_right':
+#			self.direction = self.get_player_distance_direction(player)[1]
+
 		else:
 			self.direction = pygame.math.Vector2()
 
