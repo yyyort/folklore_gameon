@@ -10,7 +10,8 @@ HITBOX_OFFSET = {
 	'player': -26,
 	'object': -60,
 	'grass': -40,
-	'invisible': 0}
+	'outer_wall': (0, 0),
+ 	'inner_wall' : (-32, -32)}
 
 # ui 
 BAR_HEIGHT = 20

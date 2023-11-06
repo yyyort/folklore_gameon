@@ -1,6 +1,6 @@
 import pygame 
 from settings import *
-from tile import Tile, Boundery, Mini
+from tile import Tile, Boundary, Mini
 from player import Player
 from debug import debug
 from support import *
@@ -48,8 +48,8 @@ class Level:
 
 	def create_map(self):
 		layouts = {
-			'boundary': import_csv_layout('../map/new_map_layout/map_bounderies_lower.csv'),
-			'boundary_mini': import_csv_layout('../map/new_map_layout/map_bounderies_upper.csv'),
+			'outer_wall': import_csv_layout('../map/new_map_layout/map_bounderies_lower.csv'),
+			'inner_wall': import_csv_layout('../map/new_map_layout/map_bounderies_upper.csv'),
 			# 'grass': import_csv_layout('../map/map_Grass.csv'),
 			# 'object': import_csv_layout('../map/map_Objects.csv'),
 			'entities': import_csv_layout('../map/new_map_layout/map_entity_objects.csv')
@@ -65,10 +65,10 @@ class Level:
 					if col != '-1':
 						x = col_index * TILESIZE
 						y = row_index * TILESIZE
-						if style == 'boundary':
-							Boundery((x,y),[self.obstacle_sprites],'invisible')
-						if style == 'boundary_mini':
-							Mini((x,y),[self.obstacle_sprites],'invisible')
+						if style == 'outer_wall':
+							Tile((x,y),[self.obstacle_sprites],'outer_wall')
+						if style == 'inner_wall':
+							Tile((x,y),[self.visible_sprites, self.obstacle_sprites],'inner_wall')
 #						if style == 'grass':
 #							random_grass_image = choice(graphics['grass'])
 #							Tile(
@@ -266,11 +266,11 @@ class YSortCameraGroup(pygame.sprite.Group):
 			offset_pos = sprite.rect.topleft - self.offset
 			self.display_surface.blit(sprite.image,offset_pos)
    
-#			rect_border = sprite.rect.move(-self.offset.x, -self.offset.y)
-#			pygame.draw.rect(self.display_surface, (255, 0, 0), rect_border, 2)
-			
-#			hitbox_border = sprite.hitbox.move(-self.offset.x, -self.offset.y)
-#			pygame.draw.rect(self.display_surface, (255, 215, 0), hitbox_border, 2)
+			rect_border = sprite.rect.move(-self.offset.x, -self.offset.y)
+			pygame.draw.rect(self.display_surface, (255, 0, 0), rect_border, 2)			
+   
+			hitbox_border = sprite.hitbox.move(-self.offset.x, -self.offset.y)
+			pygame.draw.rect(self.display_surface, (255, 215, 0), hitbox_border, 2)
 
 	def enemy_update(self,player):
 		enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']
