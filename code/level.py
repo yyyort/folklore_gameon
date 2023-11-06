@@ -199,7 +199,7 @@ class Level:
 			self.intro.display()
 			if self.intro.start_button():
 				selected_character = self.intro.character
-				selected_alis = self.intro.alias
+				selected_alias = self.intro.alias
 				self.player.get_character(selected_character, selected_alias)
 				if selected_character != '':
 					self.game_state = 'game'
