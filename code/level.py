@@ -76,7 +76,6 @@ class Level:
 #								[self.visible_sprites,self.obstacle_sprites,self.attackable_sprites],
 #								'grass',
 #								random_grass_image)
-
 						if style == 'object':
 							surf = graphics['objects'][int(col)]
 							Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'object',surf)
@@ -267,11 +266,11 @@ class YSortCameraGroup(pygame.sprite.Group):
 			offset_pos = sprite.rect.topleft - self.offset
 			self.display_surface.blit(sprite.image,offset_pos)
    
-			rect_border = sprite.rect.move(-self.offset.x, -self.offset.y)
-			pygame.draw.rect(self.display_surface, (255, 0, 0), rect_border, 2)
+#			rect_border = sprite.rect.move(-self.offset.x, -self.offset.y)
+#			pygame.draw.rect(self.display_surface, (255, 0, 0), rect_border, 2)
 			
-			hitbox_border = sprite.hitbox.move(-self.offset.x, -self.offset.y)
-			pygame.draw.rect(self.display_surface, (255, 215, 0), hitbox_border, 2)
+#			hitbox_border = sprite.hitbox.move(-self.offset.x, -self.offset.y)
+#			pygame.draw.rect(self.display_surface, (255, 215, 0), hitbox_border, 2)
 
 	def enemy_update(self,player):
 		enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']

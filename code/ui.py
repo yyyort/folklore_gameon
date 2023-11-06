@@ -62,8 +62,18 @@ class UI:
 
 	def show_hitpoints(self, hitpoint, max_hitpoint):
 		text_surf = self.font.render(f'Hitpoint:{hitpoint}/{max_hitpoint}',False,TEXT_COLOR)
-		x = 10
-		y = 10
+		x = 20
+		y = 20
+		text_rect = text_surf.get_rect(topleft = (x,y))
+  
+		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20, 20))
+		self.display_surface.blit(text_surf, text_rect)
+		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR, text_rect.inflate(20,20),3)
+  
+	def show_stamina(self, stamina, max_stamina):
+		text_surf = self.font.render(f'Stamina:{stamina:.0f}/{max_stamina}',False,TEXT_COLOR)
+		x = 20
+		y = 70
 		text_rect = text_surf.get_rect(topleft = (x,y))
   
 		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20, 20))
@@ -80,14 +90,14 @@ class UI:
 		return bg_rect
 
 	def weapon_overlay(self,weapon_index,has_switched):
-		bg_rect = self.selection_box(10,630,has_switched)
+		bg_rect = self.selection_box(WIDTH * 0.01,HEIGTH - 100,has_switched)
 		weapon_surf = self.weapon_graphics[weapon_index]
 		weapon_rect = weapon_surf.get_rect(center = bg_rect.center)
 
 		self.display_surface.blit(weapon_surf,weapon_rect)
 
 	def magic_overlay(self,magic_index,has_switched):
-		bg_rect = self.selection_box(100,630,has_switched)
+		bg_rect = self.selection_box(WIDTH * 0.06,HEIGTH - 100,has_switched)
 		magic_surf = self.magic_graphics[magic_index]
 		magic_rect = magic_surf.get_rect(center = bg_rect.center)
 
@@ -98,6 +108,7 @@ class UI:
 #		self.show_bar(player.stamina, player.stats['stamina'],self.stamina_bar_rect,ENERGY_COLOR)
 
 		self.show_hitpoints(player.health, player.stats['health'])
+		self.show_stamina(player.stamina, player.stats['stamina'])
 
 		self.show_exp(player.level, player.exp, player.exp_cap)
 		self.show_score(player.score)

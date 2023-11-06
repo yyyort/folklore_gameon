@@ -123,15 +123,19 @@ class Player(Entity):
 				self.direction.x = 0
 
 			if not self.running:
-				if keys[pygame.K_LSHIFT]:
+				if keys[pygame.K_LSHIFT] and self.stamina > 1:
 					self.running = True
-					if self.running:
-						self.speed *= self.sprint
+					self.speed *= self.sprint
+				else:
+					self.running = False
 			else:
-				if not keys[pygame.K_LSHIFT]:
+				if not keys[pygame.K_LSHIFT] or self.stamina <= 1:
 					self.running = False
 					self.speed = self.stats['speed']
 
+			if self.running:
+				self.stamina -= 0.5 * 1
+   
 			# attack input 
 			if keys[pygame.K_SPACE]:
 				self.attacking = True
@@ -263,6 +267,9 @@ class Player(Entity):
 		return list(self.upgrade_cost.values())[index]
 
 	def stamina_regen(self):
+		if self.stamina <= 0:
+			self.stamina = 0
+     
 		if self.stamina < self.stats['stamina']:
 			self.stamina += 0.1 * self.stats['regen']
 		else:

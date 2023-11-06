@@ -12,6 +12,8 @@ class Intro:
         self.can_click = True
         self.click_cooldown = 50
         self.click_time = None
+        
+        self.player_data = player_data
     
     def input(self):
         mouse_click = pg.mouse.get_pressed()
@@ -60,7 +62,8 @@ class Intro:
         self.display_surface.blit(input_surf,input_rect)
 
     def display_male(self):
-        image = pg.image.load('../graphics/test/player.png').convert_alpha()
+        image = pg.image.load('../graphics/player_alt/down_idle/down_idle.png').convert_alpha()
+        image = pg.transform.scale(image, (TILESIZE, TILESIZE))
         image_rect = image.get_rect(center = (self.display_surface.get_size()[0]//2 - 50,self.display_surface.get_size()[1]//2 + 100))
         self.display_surface.blit(image,image_rect)
         
@@ -70,7 +73,7 @@ class Intro:
         self.display_surface.blit(image,image_rect)
 
     def display_male_info(self):
-        health = self.font.render('Health: 100',False,TEXT_COLOR)
+        health = self.font.render(f'Health: {self.player_data["male"]["health"]}',False,TEXT_COLOR)
         health_rect = health.get_rect(center = (self.display_surface.get_size()[0]//2 - 200,self.display_surface.get_size()[1]//2 + 100))
         self.display_surface.blit(health,health_rect)
         energy = self.font.render('Energy: 60',False,TEXT_COLOR)

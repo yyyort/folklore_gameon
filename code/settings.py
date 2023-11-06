@@ -1,6 +1,9 @@
+import pygame as pg 
+pg.init()
 # game setup
-WIDTH    = 1280	
-HEIGTH   = 720
+WIDTH    = pg.display.Info().current_w
+HEIGTH   = pg.display.Info().current_h
+
 FPS      = 60
 TILESIZE = 64
 HITBOX_OFFSET = {
@@ -54,8 +57,8 @@ female_player_data = {
 }
 
 player_data = {
-	'male' : {'health' : 100, 'stamina' : 100, 'speed' : 5, 'damage' : 2.50, 'sprint' : 1.50, 'regen' : 1.50},
-	'female' : {'health' : 100, 'stamina' : 100, 'speed' : 7.5, 'damage' : 1.75, 'sprint' : 2.25, 'regen' : 1.50},
+	'male' : {'health' : 100, 'stamina' : 75, 'speed' : 5, 'damage' : 2.50, 'sprint' : 1.50, 'regen' : 1.50},
+	'female' : {'health' : 100, 'stamina' : 125, 'speed' : 7.5, 'damage' : 1.75, 'sprint' : 2.25, 'regen' : 1.50},
  	'' : {'health' : 100, 'stamina' : 100, 'speed' : 5, 'damage' : 2.50, 'sprint' : 1.50, 'regen' : 1.50}
 }
 
