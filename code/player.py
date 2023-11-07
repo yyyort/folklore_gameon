@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from support import import_folder
 from entity import Entity
+from debug import debug
 
 class Player(Entity):
 	def __init__(
@@ -26,7 +27,9 @@ class Player(Entity):
 		self.speed = self.stats['speed']
 		self.energy = self.stats['energy']
 		self.exp = 0
-	
+
+		#items
+
 
 		# graphics setup
 		self.import_player_assets()
@@ -281,6 +284,14 @@ class Player(Entity):
 			self.energy = self.stats['energy']
 
 	def update(self):
+		"""text = (
+			self.attack time {self.attack_time}
+			self.attack cooldown {self.attack_cooldown}
+			self.attacking {self.attacking}
+
+			 )
+		debug(text)"""
+		
 		self.input()
 		self.cooldowns()
 		self.get_status()

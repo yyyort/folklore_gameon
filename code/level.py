@@ -240,6 +240,7 @@ class Level:
 			#print(self.player.debuffs)
 			
 			if self.game_paused:
+				
 				#self.upgrade.display()
 				self.new_upgrade.display()
 			else:

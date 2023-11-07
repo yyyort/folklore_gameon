@@ -1,13 +1,17 @@
 import pygame
 from settings import *
+from debug import debug
 
 class NewUpgrade:
     def __init__(self, player):
         # general setup
         self.display_surface = pygame.display.get_surface()
         self.player = player
+        #self.weapon = weapon
+        self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE + 20)
         
         self.cards = []
+        self.weapon_cards = []
 
         # card setup
         self.card_pos = [(CARD_WIDTH + CARD_SPACING) * i +
@@ -23,17 +27,50 @@ class NewUpgrade:
             self.player.defense,
             self.player.attack,
             self.player.speed]
+        
+        # weapon card setup
+        """ self.weapon_card_pos = [(CARD_WIDTH + CARD_SPACING) * i +
+                            CARD_SPACING for i in range(3)]
+        self.weapon_card_pos_y = [CARD_SPACING for i in range(3)]
+        self.weapon_card_text = [
+            'knife',
+            'bolo',
+            'molotov']
+        self.weapon_card_value = [
+            self.player.knife,
+        
+         """
 
     def create_cards(self):
         for i in range(len(self.card_pos)):
             self.cards.append(Card((self.card_pos[i], self.card_pos_y[i]),
                               self.card_text[i], self.card_value[i], self.player, self.display_surface))
 
+    def display_stats(self):
+        # display player stats in right of the cards
+        health = self.font.render('Health: ' + str(self.player.health), False, TEXT_COLOR)
+        defense = self.font.render('Defense: ' + str(self.player.defense), False, TEXT_COLOR)
+        attack = self.font.render('Attack: ' + str(self.player.attack), False, TEXT_COLOR)
+        speed = self.font.render('Speed: ' + str(self.player.speed), False, TEXT_COLOR)
+        """ knife = self.font.render('Knife: ' + str(self.player.knife), False, TEXT_COLOR)
+        bolo = self.font.render('Bolo: ' + str(self.player.bolo), False, TEXT_COLOR)
+        molotov = self.font.render('Molotov: ' + str(self.player.molotov), False, TEXT_COLOR) """
+        
+        self.display_surface.blit(health, (self.card_pos[-1] + CARD_WIDTH + 50, self.card_pos_y[-1]))
+        self.display_surface.blit(defense, (self.card_pos[-1] + CARD_WIDTH + 50, self.card_pos_y[-1] + 50))
+        self.display_surface.blit(attack, (self.card_pos[-1] + CARD_WIDTH + 50, self.card_pos_y[-1] + 100))
+        self.display_surface.blit(speed, (self.card_pos[-1] + CARD_WIDTH + 50, self.card_pos_y[-1] + 150))
+        """ self.display_surface.blit(knife, (self.card_pos[0] + CARD_WIDTH + 50, self.card_pos_y[0] + 200))
+        self.display_surface.blit(bolo, (self.card_pos[0] + CARD_WIDTH + 50, self.card_pos_y[0] + 250))
+        self.display_surface.blit(molotov, (self.card_pos[0] + CARD_WIDTH + 50, self.card_pos_y[0] + 300)) """
+
+
     def display(self):
         self.create_cards()
         for card in self.cards:
             card.update()
         
+        self.display_stats()
 
 
 class Card:
@@ -76,12 +113,6 @@ class Card:
         self.plus_button = pygame.transform.scale(self.plus_button, (32, 32))
         self.minus_button = pygame.transform.scale(self.minus_button, (32, 32))
 
-        self.add_btn = Button((self.pos[0] + CARD_WIDTH/2 - self.plus_button.get_width()/2 + 50,
-             self.pos[1] + CARD_HEIGHT/2 - self.plus_button.get_height()/2 + 100), self.plus_button, self.display_surface)
-        self.minus_btn = Button((self.pos[0] + CARD_WIDTH/2 - self.minus_button.get_width()/2 - 50,
-             self.pos[1] + CARD_HEIGHT/2 - self.minus_button.get_height()/2 + 100), self.minus_button, self.display_surface)
-     
-
 
     def draw(self):
         # draw card
@@ -108,10 +139,31 @@ class Card:
         self.add()
 
         #draw value between plus and minus buttons
+        self.draw_value()
+        
+    def draw_value(self):
+        #draw value between plus and minus buttons
         value = self.font.render(str(self.value), False, TEXT_COLOR)
         self.display_surface.blit(value,
                                     (self.pos[0] + CARD_WIDTH/2 - value.get_width()/2,
                                      self.pos[1] + CARD_HEIGHT/2 - value.get_height()/2 + 50))
+        
+    def update_value(self):
+        #update value
+        if self.text == 'health':
+            self.value = self.player.health
+        elif self.text == 'defense':
+            self.value = self.player.defense
+        elif self.text == 'attack':
+            self.value = self.player.attack
+        elif self.text == 'speed':
+            self.value = self.player.speed
+        """ elif self.text == 'knife':
+            self.value = self.player.knife
+        elif self.text == 'bolo':
+            self.value = self.player.bolo
+        elif self.text == 'molotov':
+            self.value = self.player.molotov """
 
     def check_hover(self):
         # check if mouse is hovering over card
@@ -133,11 +185,11 @@ class Card:
                          (self.pos[0], self.pos[1], CARD_WIDTH, CARD_HEIGHT), CARD_BORDER)
         
     def add(self):
+        self.add_btn = Button((self.pos[0] + CARD_WIDTH/2 - self.plus_button.get_width()/2 + 50,
+             self.pos[1] + CARD_HEIGHT/2 - self.plus_button.get_height()/2 + 100), self.plus_button, self.display_surface)
         self.add_btn.draw()
         #check if clicked and update value and player stat
-        if self.add_btn.clicked:
-            print('test')
-            self.value += 1
+        if self.add_btn.clicking:
             if self.text == 'health':
                 self.player.health += 1
             elif self.text == 'defense':
@@ -152,14 +204,19 @@ class Card:
                 self.player.bolo += 1
             elif self.text == 'molotov':
                 self.player.molotov += 1 """
-            self.draw()
+            #update value
+            self.update_value()
+            self.draw_value()
+            
 
     def minus(self):
+        self.minus_btn = Button((self.pos[0] + CARD_WIDTH/2 - self.minus_button.get_width()/2 - 50,
+             self.pos[1] + CARD_HEIGHT/2 - self.minus_button.get_height()/2 + 100), self.minus_button, self.display_surface)
+     
         self.minus_btn.draw()
         #check if clicked and update value and player stat
-        if self.minus_btn.clicked and self.value > 0:
-            print('test')
-            self.value -= 1
+        if self.minus_btn.clicking:
+            print(self.value)
             if self.text == 'health':
                 self.player.health -= 1
             elif self.text == 'defense':
@@ -174,69 +231,9 @@ class Card:
                 self.player.bolo -= 1
             elif self.text == 'molotov':
                 self.player.molotov -= 1 """
-            self.draw()
-
-        
-    """ def add(self):
-        # draw plus button below icon
-        self.display_surface.blit(
-            self.plus_button,
-            (self.pos[0] + CARD_WIDTH/2 - self.plus_button.get_width()/2 + 50,
-             self.pos[1] + CARD_HEIGHT/2 - self.plus_button.get_height()/2 + 100))
-        # if clicked add update value and player text
-        if self.check_hover and self.can_click:
-            if pygame.mouse.get_pressed()[0] :
-                #update value and player stat
-                self.value += 1
-                if self.text == 'health':
-                    self.player.health += 1
-                elif self.text == 'defense':
-                    self.player.defense += 1
-                elif self.text == 'attack':
-                    self.player.attack += 1
-                elif self.text == 'speed':
-                    self.player.speed += 1
-
-                #reset click cooldown
-                self.can_click = False
-                self.click_time = pygame.time.get_ticks()
-                
-                print('test plus')
-                self.draw()
-
-    def minus(self):
-        # draw minus button below icon
-        self.display_surface.blit(
-            self.minus_button,
-            (self.pos[0] + CARD_WIDTH/2 - self.minus_button.get_width()/2 - 50,
-             self.pos[1] + CARD_HEIGHT/2 - self.minus_button.get_height()/2 + 100))
-
-        # if clicked minus update value and player text
-        if self.check_hover and self.can_click:
-            if pygame.mouse.get_pressed()[0] and self.value > 0:
-                #update value and player stat
-                self.value -= 1
-                if self.text == 'health':
-                    self.player.health -= 1
-                elif self.text == 'defense':
-                    self.player.defense -= 1
-                elif self.text == 'attack':
-                    self.player.attack -= 1
-                elif self.text == 'speed':
-                    self.player.speed -= 1
-               
-                #reset click cooldown
-                self.can_click = False
-                self.click_time = pygame.time.get_ticks()
-                
-                print('test minus')
-                self.draw()
-                #q: why is it still clicking even i dont hover over the card?
-                #a: 
-
-
-                #q: why the player stat is reseting when i click the card?
- """
+            #update value
+            self.update_value()
+            self.draw_value()
 
     def update(self):
         self.draw()
@@ -251,10 +248,18 @@ class Button:
         self.image = image
         self.display_surface = display_surface
         self.hover = False
-        self.click_time = None
-        self.click_cooldown = 1000  # Set cooldown period in milliseconds (1000 = 1 second)
-        self.can_click = True
-        self.clicked = False
+        self.clicking = False
+
+        
+    def click(self):
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.check_hover()
+                if self.hover:
+                    print('test')
+                    self.clicking = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.clicking = False
 
     def check_hover(self):
         # Check if mouse is hovering over the button
@@ -269,89 +274,11 @@ class Button:
         pygame.draw.rect(self.display_surface, CARD_BORDER_COLOR_ACTIVE,
                          (self.pos[0], self.pos[1], self.image.get_width(), self.image.get_height()), CARD_BORDER)
 
-    def check_click(self):
-        self.check_hover()
-        if self.hover and self.can_click:
-            if pygame.mouse.get_pressed()[0]:
-                # Reset click cooldown
-                self.click_time = pygame.time.get_ticks()
-                self.can_click = False  # Disable subsequent clicks during cooldown period
-                self.draw()
-                self.clicked = True
-            else:
-                self.clicked = False
-        else:
-            self.clicked = False
-
     def draw(self):
+        debug(self.clicking)
         self.display_surface.blit(self.image, self.pos)
-        self.check_click()
+        #self.cooldown()
         self.check_hover()
         if self.hover:
             self.draw_hover()
-
-    def update(self):
-        # Update click cooldown based on current time
-        if not self.can_click:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.click_time >= self.click_cooldown:
-                self.can_click = True  # Enable clicks after cooldown period
-
-#for minus and plus button
-""" class Button:
-    def __init__(self, pos, image, display_surface):
-        self.pos = pos
-        self.image = image
-        self.display_surface = display_surface
-        self.hover = False
-        self.click_time = None
-        self.can_click = True
-        self.clicked = False
-
-    def click_cooldown(self):
-        if not self.can_click:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.click_time >= 1000:
-                self.can_click = True
-                self.clicked = False
-
-
-    def check_hover(self):
-        # check if mouse is hovering over card
-        mouse_pos = pygame.mouse.get_pos()
-        if pygame.Rect(self.pos[0], self.pos[1], self.image.get_width(), self.image.get_height()).collidepoint(mouse_pos):
-            self.hover = True
-        else:
-            self.hover = False
-    
-    def draw_hover(self):
-        # draw hover border
-        pygame.draw.rect(self.display_surface, CARD_BORDER_COLOR_ACTIVE,
-                         (self.pos[0], self.pos[1], self.image.get_width(), self.image.get_height()), CARD_BORDER)
-    
-    def if_clicked(self):
-        self.check_hover()
-        if self.hover and self.can_click:
-            if pygame.mouse.get_pressed()[0]:
-                #reset click cooldown
-                self.can_click = False
-                self.click_time = pygame.time.get_ticks()
-                self.draw()
-                self.clicked = True
-            else:
-                self.clicked = False
-        else:
-            #self.can_click = False
-            self.clicked = False
-            
-
-    def draw(self):
-        self.display_surface.blit(self.image, self.pos)
-        self.if_clicked()
-        self.click_cooldown()
-        self.check_hover()
-        if self.hover:
-            self.draw_hover()
-
-        
- """
+            self.click()
