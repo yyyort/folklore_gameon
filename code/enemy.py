@@ -9,6 +9,7 @@ class Enemy(Entity):
 		# general setup
 		super().__init__(groups)
 		self.sprite_type = 'enemy'
+		self.skill_damage_timer = None
 
 		# graphics setup
 		self.import_graphics(monster_name)
@@ -45,15 +46,16 @@ class Enemy(Entity):
 		# invincibility timer
 		self.vulnerable = True
 		self.hit_time = None
-		self.invincibility_duration = 300
+		self.invincibility_duration = 100
+		self.sound = SOUDN_VOLUME
 
 		# sounds
 		self.death_sound = pygame.mixer.Sound('../audio/death.wav')
 		self.hit_sound = pygame.mixer.Sound('../audio/hit.wav')
 		self.attack_sound = pygame.mixer.Sound(monster_info['attack_sound'])
-		self.death_sound.set_volume(0.6)
-		self.hit_sound.set_volume(0.6)
-		self.attack_sound.set_volume(0.6)
+		self.death_sound.set_volume(self.sound)
+		self.hit_sound.set_volume(self.sound)
+		self.attack_sound.set_volume(self.sound)
 
 		self.max_health = monster_info['health'] # Store the maximum health
 		self.health_bar_width = 50
@@ -129,14 +131,25 @@ class Enemy(Entity):
 			if current_time - self.hit_time >= self.invincibility_duration:
 				self.vulnerable = True
 
+	#to change skill/attack
 	def get_damage(self,player,attack_type):
 		if self.vulnerable:
 			self.hit_sound.play()
 			self.direction = self.get_player_distance_direction(player)[1]
 			if attack_type == 'weapon':
 				self.health -= player.get_full_weapon_damage()
+			elif attack_type == 'item':
+				self.health -= player.get_full_item_damage()
 			else:
-				self.health -= player.get_full_magic_damage()
+				self.health -= player.get_full_item_damage()
+			self.hit_time = pygame.time.get_ticks()
+			self.vulnerable = False
+	
+	def skill_damage(self, player, damage, duration):
+		if self.vulnerable:
+			self.hit_sound.play()
+			self.direction = self.get_player_distance_direction(player)[1]
+			self.health -= damage
 			self.hit_time = pygame.time.get_ticks()
 			self.vulnerable = False
 
@@ -175,10 +188,6 @@ class Enemy(Entity):
 
 			# Blit the health bar surface onto the enemy's image
 			self.image.blit(health_bar_surface, self.health_bar_rect)
-
-
-
-
 
 
 	""" def draw_health_bar(self):

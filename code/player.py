@@ -8,7 +8,7 @@ class Player(Entity):
 	def __init__(
 			self,pos,groups,obstacle_sprites,
 			create_attack,destroy_attack,
-			create_magic, use_item):
+			create_magic, use_item, create_item):
 		super().__init__(groups)
 		self.image = pygame.image.load('../graphics/test/player.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
@@ -58,6 +58,7 @@ class Player(Entity):
 		self.magic_switch_time = None
 
 		#item
+		self.create_item = create_item
 		self.use_item = use_item
 		self.item_index = 0
 		self.item = list(item_data.keys())[self.item_index]
@@ -81,7 +82,7 @@ class Player(Entity):
 
 		# import a sound
 		self.weapon_attack_sound = pygame.mixer.Sound('../audio/sword.wav')
-		self.weapon_attack_sound.set_volume(0.4)
+		self.weapon_attack_sound.set_volume(SOUDN_VOLUME)
 
 		#debuff
 		self.debuffs = []
@@ -161,9 +162,10 @@ class Player(Entity):
 			#item input
 			if keys[pygame.K_LSHIFT]:
 				self.attacking = True
+				self.create_item()
 				self.attack_time = pygame.time.get_ticks()
 				style = list(item_data.keys())[self.item_index]
-				strength = list(item_data.values())[self.item_index]['strength'] + self.stats['magic']
+				strength = list(item_data.values())[self.item_index]['strength']
 				cost = list(item_data.values())[self.item_index]['cost']
 				self.use_item(style,strength,cost)
 
@@ -238,6 +240,10 @@ class Player(Entity):
 			if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
 				self.can_switch_magic = True
 
+		if not self.can_switch_item:
+			if current_time - self.item_switch_time >= self.switch_duration_cooldown:
+				self.can_switch_item = True
+
 		if not self.vulnerable:
 			if current_time - self.hurt_time >= self.invulnerability_duration:
 				self.vulnerable = True
@@ -270,6 +276,12 @@ class Player(Entity):
 		base_damage = self.stats['magic']
 		spell_damage = magic_data[self.magic]['strength']
 		return base_damage + spell_damage
+	
+	#changed for item
+	def get_full_item_damage(self):
+		base_damage = self.stats['attack']
+		item_damage = item_data[self.item]['strength']
+		return base_damage + item_damage
 
 	def get_value_by_index(self,index):
 		return list(self.stats.values())[index]
@@ -279,7 +291,7 @@ class Player(Entity):
 
 	def energy_recovery(self):
 		if self.energy < self.stats['energy']:
-			self.energy += 0.01 * self.stats['magic']
+			self.energy += 0.01 # * self.stats['magic']
 		else:
 			self.energy = self.stats['energy']
 

@@ -9,6 +9,8 @@ HITBOX_OFFSET = {
 	'grass': -10,
 	'invisible': 0}
 
+SOUDN_VOLUME = 0
+
 # ui 
 BAR_HEIGHT = 20
 HEALTH_BAR_WIDTH = 200
@@ -111,6 +113,11 @@ magic_data = {
 
 #item
 item_data = {
+	'molotov': {'strength': 5,'cost': 1,'graphic':'../graphics/particles/molotov/molotov.png'},
+    'gun': {'strength': 5,'cost': 1,'graphic':'../graphics/items/gun.png'},
+}
+
+throwable_item_data = {
 	'molotov': {'strength': 5,'cost': 1,'graphic':'../graphics/particles/molotov/molotov.png'},
 }
 

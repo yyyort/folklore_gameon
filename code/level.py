@@ -8,13 +8,16 @@ from random import choice, randint
 from ui import UI
 from particles import AnimationPlayer
 
+
 #player
 from player import Player
 from weapon import Weapon
 from magic import MagicPlayer
 from item import ItemPlayer
+from item import Item
 #from old_upgrade import Upgrade
 from new_upgrade import NewUpgrade
+
 
 #enemy
 from enemy import Enemy
@@ -50,6 +53,7 @@ class Level:
 
 		# particles
 		self.animation_player = AnimationPlayer()
+
 		self.magic_player = MagicPlayer(self.animation_player)
 		self.item_player = ItemPlayer(self.animation_player)
 
@@ -113,7 +117,9 @@ class Level:
 									self.create_attack,
 									self.destroy_attack,
 									self.create_magic,
-									self.use_item,)
+									self.use_item,
+									self.create_item,
+									)
 							else:
 								if col == '390': monster_name = 'bamboo'
 								elif col == '391': monster_name = 'spirit'
@@ -130,8 +136,10 @@ class Level:
 
 	#player function
 	def create_attack(self):
-		
 		self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
+
+	def create_item(self):
+		self.current_attack = Item(self.player,[self.visible_sprites,self.attack_sprites])
 
 	def create_magic(self,style,strength,cost):
 		if style == 'heal':
@@ -140,13 +148,15 @@ class Level:
 		if style == 'flame':
 			self.magic_player.flame(self.player,cost,[self.visible_sprites,self.attack_sprites])
 
-		#changed for skill
+		#changed for skill 
 		if style == 'normal':
 			self.magic_player.normal(self.player,cost,[self.visible_sprites,self.attack_sprites])
 
 	def use_item(self,style,strength,cost):
 		if style == 'molotov':
 			self.item_player.molotov(self.player,cost,[self.visible_sprites,self.attack_sprites]) 
+		if style == 'gun':
+			self.item_player.gun(self.player,cost,[self.visible_sprites,self.attack_sprites])
 
 	def destroy_attack(self):
 		if self.current_attack:
@@ -168,18 +178,27 @@ class Level:
 							target_sprite.kill()
 						else:
 							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
-							if attack_sprite.sprite_type == 'magic':
-								target_sprite.get_damage(self.player,attack_sprite.sprite_type)
-								attack_sprite.kill()
-							
-							#change molotov effect
-							if attack_sprite.sprite_type == 'molotov':
-								pos = target_sprite.rect.center
-								offset = pygame.math.Vector2(0,75)
-								self.animation_player.create_particles('molotov',pos,self.visible_sprites)
-								target_sprite.get_damage(self.player,attack_sprite.sprite_type)
-							
 
+							#change item effect
+							if attack_sprite.sprite_type == 'gun':
+								attack_sprite.kill()
+
+							if attack_sprite.sprite_type == 'molotov':
+								attack_sprite.kill()
+								posx = target_sprite.rect.centerx
+								posy = target_sprite.rect.centery
+									
+								for _ in range(10):	
+									
+									target_sprite.skill_damage(self.player,20, 2000)
+									
+									# Calculate a random position around the projectile's center
+									offset_x = randint(-50, 50)  # Adjust the offset values as needed
+									offset_y = randint(-50, 50)  # Adjust the offset values as needed
+									spawn_position = (posx + offset_x, posy + offset_y)
+									
+									self.item_player.animation_player.create_particles('molotov',spawn_position,[self.visible_sprites])
+								
 	#enemy function
 	def damage_effect(self,attack_type):
 		if attack_type == 'leaf_attack':
