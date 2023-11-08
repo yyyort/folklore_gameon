@@ -18,10 +18,10 @@ class GAME:
         
         self.level = Level()
     
-    def fps_counter(self):
+    def fps_counter(self, x , y):
         fps = str(int(self.clock.get_fps()))
         fps_t = self.font.render(fps , 1, pg.Color("RED"))
-        self.display.blit(fps_t,(100,100))
+        self.display.blit(fps_t,(x, y))
 
 #    def key_input(self):
 #        for event in pg.event.get():
@@ -36,26 +36,16 @@ class GAME:
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
-        
+    
     def run(self):
         while True:
             self.display.fill((0, 0, 0))
             self.alt_f4()
             
             self.level.run()
-            if self.level.game_state == 'selection':
-                for event in pg.event.get():
-                    if event.type == pg.KEYUP:
-                        if event.key == pg.K_BACKSPACE:
-                            self.level.menu.alias = self.level.menu.alias[:-1]
-                        elif event.unicode.isprintable():
-                            self.level.menu.alias += event.unicode
-                            
-            
-            self.level.run()
             self.level.debug()
             
-            self.fps_counter()
+            self.fps_counter(WIDTH - 100, HEIGHT - 100)
             self.clock.tick(FPS)
             pg.display.flip()
             

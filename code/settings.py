@@ -8,7 +8,7 @@ TILESIZE = 64
 FPS = 60
 
 FONT = '../graphics/font/joystix.ttf'
-FONT_SIZE = (18, 21, 24, 26, 32, 46, 52) # 0:1:2:3:4:5:6
+FONT_SIZE = (18, 21, 24, 26, 32, 46, 52, 72, 84) # 0:1:2:3:4:5:6:7:8
 FONT_COLOR = ((255, 0, 0), # RED 0
               (0, 255, 0), # GREEN 1
               (0, 0, 255), # BLUE 2 

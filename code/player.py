@@ -200,4 +200,4 @@ class Player(Entities):
         self.cooldowns()
         
 #       self.health -= 0.001 + 1
-        self.exp += 0.5 + 1
+#       self.exp += 0.5 + 1

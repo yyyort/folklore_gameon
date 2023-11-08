@@ -50,6 +50,7 @@ class Level:
                                 self.player = Player((x, y),
                                                      [self.visible_sprites],
                                                      self.obstacle_sprites)
+                            else: pass
     
     def reset(self):
         self.display_surface = pg.display.get_surface()
@@ -67,31 +68,30 @@ class Level:
         
         self.create_map()
         self.game_state = 'menu'
-    
+        
     def run(self):
+        
         if self.game_state == 'menu':
-            self.menu.display_menu()
-            if self.menu.play_button():
+            self.menu.update()
+            if self.menu.state == 'selection':
                 self.game_state = 'selection'
-                
-        elif self.game_state == 'selection':
-            self.menu.display_character_selection()
-            if self.menu.character_selection():
+            elif self.menu.exit_button():
+                pg.quit()
+                exit()
+        
+        if self.game_state == 'selection':
+            self.menu.update()
+            if self.menu.state == 'gameplay':
                 self.player.get_character(self.menu.character, self.menu.alias)
-                self.game_state = 'game_play'
-                
-        elif self.game_state == 'game_over':
-            self.menu.display_game_over()
-            if self.menu.restart_button():
-                self.reset()
-                
-        elif self.game_state == 'game_play':
+                self.game_state = 'gameplay'
+        
+        if self.game_state == 'gameplay':
             self.visible_sprites.custom_draw(self.player)
-            if not self.game_pause:
-                self.visible_sprites.update()
-                if self.player.health <= 0:
-                    self.game_state = 'game_over'
-
+            self.visible_sprites.update()
+            
+#            self.menu.update()
+#            if self.menu.state == 'menu':
+#                self.game_state = 'menu'
         
     def debug(self):
         debug(f'Health:{self.player.health:.0f}', 10, 10)
@@ -101,7 +101,9 @@ class Level:
         debug(f'Score:{self.player.score:.0f}|Accumulated Score:{self.player.total_score:.0f}', 10, 10*13)
         debug(f'Score:{self.player.alias}', 10, 10*16)
         debug(f'Gamestate:{self.game_state}', 10, 10*19)
-        debug(f'Menu state:{self.menu.game_state}', 10, 10*22)
+        debug(f'Button press:{self.menu.can_click}', 10, 10*22)
+        debug(f'Menu State:{self.menu.play_button()},', 10, 10*25)
+        debug(f'Menu State:{self.menu.state},', 10, 10*28)
         
 class YSortCameraGroup(pg.sprite.Group):
     def __init__(self) -> None:
@@ -113,7 +115,7 @@ class YSortCameraGroup(pg.sprite.Group):
         self.offset = pg.math.Vector2()
         
         
-        self.image = pg.image.load('../graphics/tilemap/map_image/map_5.png').convert_alpha()
+        self.image = pg.image.load('../graphics/tilemap/map_image/map_6.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = (0, 0))
         
     def custom_draw(self, player):

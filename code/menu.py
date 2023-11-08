@@ -1,193 +1,219 @@
-import pygame as pg 
+import pygame as pg
 from settings import *
 
-class Menu:
-    def __init__(self):
-        
-        self.font = pg.font.Font(FONT, FONT_SIZE[6])
-        
+class Menu():
+    def __init__(self) -> None:
         self.display_surface = pg.display.get_surface()
-        
-        self.can_click = True
-        self.click_cooldown = 175
-        self.click_time = None
-        
-        self.can_type = True
-        self.input_cooldown = 500
-        self.input_time = None
-        
-        self.clock = pg.time.Clock()
+        self.big_font = pg.font.Font(FONT, FONT_SIZE[7])
+        self.mid_font = pg.font.Font(FONT, FONT_SIZE[5])
+        self.font = pg.font.Font(FONT, FONT_SIZE[3])
         
         self.character = ''
         self.alias = ''
-        self.game_state = 'menu'
-        self.leaderboard_list = []
+        self.leaderboard = []
+    
+        self.state = 'menu'
+    
+        self.can_click = True
+        self.click_time = None
+        self.click_cooldown = 150
         
-    def input(self):
-        self.mouse_click = pg.mouse.get_pressed()
+    def handle_event(self):
         self.mouse_pos = pg.mouse.get_pos()
+        self.mouse_press = pg.mouse.get_pressed()        
+        self.key = pg.key.get_pressed()
         
-        if self.can_click:
-            if self.mouse_click[0]:
-                self.click_time = pg.time.get_ticks()
-                self.can_click = False
-                    
-    def key_input(self):
+        if self.key[pg.K_ESCAPE]:
+            self.state = 'menu'
         
-        for event in pg.event.get():
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_BACKSPACE:
-                    self.alias = self.alias[:-1]
-                elif event.unicode.isprintable():
-                    self.alias += event.unicode
-                    
+        if self.mouse_press[0]:
+            self.click_time = pg.time.get_ticks()
+            self.can_click = False
+    
     def cooldown(self):
         current_time = pg.time.get_ticks()
-        
+    
         if not self.can_click:
             if current_time - self.click_time >= self.click_cooldown:
                 self.can_click = True
-
-        if not self.can_type:
-            if current_time - self.can_type >= self.input_cooldown:
-                self.can_type = True
-        
-        if self.play_button():
-            return None
-        
-        if self.restart_button():
-            return None
-    
-    def background(self):
+                
+    def background(self, x, y):
         surf = pg.Surface((WIDTH, HEIGHT))
-        surf.fill((0, 0, 215))
-        rect = surf.get_rect(topleft = (0, 0))
+        rect = surf.get_rect(topleft = (x, y))
         
         self.display_surface.blit(surf, rect)
+    
+    def back_button(self, back):
+        text = 'BACK'
+        surf = self.font.render(text, False, FONT_COLOR[4])
+        rect = surf.get_rect(center = (WIDTH - 100, 50))
+        hitbox = rect.inflate(10, 10)
+        
+        if hitbox.collidepoint(self.mouse_pos):
+            surf = self.font.render(text, False, FONT_COLOR[0])
+        
+        self.display_surface.blit(surf, rect)
+        pg.draw.rect(self.display_surface, (225, 215, 0), hitbox, 2)
+        
+        if hitbox.collidepoint(self.mouse_pos) and self.mouse_press[0] and not self.can_click:
+            self.state = back
+            return self.state
     
     def play_button(self):
-        surf = self.font.render("PLAY", False, FONT_COLOR[4])
-        rect = surf.get_rect(center = (WIDTH // 2, HEIGHT // 2 - 100))
+        text = 'PLAY'
+        surf = self.big_font.render(text, False, FONT_COLOR[4])
+        rect = surf.get_rect(center = (WIDTH // 2, HEIGHT // 2 - 50))
         hitbox = rect.inflate(10, 10)
         
-        if hitbox.collidepoint(self.mouse_pos):
-            surf = self.font.render("PLAY", False, FONT_COLOR[0])
+        if self.state == 'menu':
+            if hitbox.collidepoint(self.mouse_pos):
+                surf = self.big_font.render(text, False, FONT_COLOR[0])
+            
+            self.display_surface.blit(surf, rect)
+            pg.draw.rect(self.display_surface, (255, 215, 0), hitbox, 2)
         
-        self.display_surface.blit(surf, rect)
-        pg.draw.rect(self.display_surface, (255, 255, 255), hitbox, 3)
-        
-        if not self.can_click and self.mouse_click[0] and hitbox.collidepoint(self.mouse_pos):
-            return True
+            if hitbox.collidepoint(self.mouse_pos) and self.mouse_press[0] and not self.can_click:
+                self.state = 'selection'
+                return self.state
         
     def exit_button(self):
-        surf = self.font.render("EXIT", False, FONT_COLOR[4])
-        rect = surf.get_rect(center = (WIDTH // 2, HEIGHT // 2))
+        text = 'EXIT'
+        surf = self.big_font.render(text, False, FONT_COLOR[4])
+        rect = surf.get_rect(center = (WIDTH // 2, HEIGHT // 2 + 50))
         hitbox = rect.inflate(10, 10)
         
-        if hitbox.collidepoint(self.mouse_pos):
-            surf = self.font.render("EXIT", False, FONT_COLOR[0])
-        
-        self.display_surface.blit(surf, rect)
-        pg.draw.rect(self.display_surface, (255, 255, 255), hitbox, 3)
-        
-        if not self.can_click and self.mouse_click[0] and hitbox.collidepoint(self.mouse_pos):
-            pg.quit()
-            exit()
-        
-    def restart_button(self):
-        surf = self.font.render("RESTART", False, FONT_COLOR[4])
-        rect = surf.get_rect(center = (WIDTH // 2, HEIGHT // 2 - 100))
-        hitbox = rect.inflate(10, 10)
-        
-        if hitbox.collidepoint(self.mouse_pos):
-            surf = self.font.render("RESTART", False, FONT_COLOR[0])
-        
-        self.display_surface.blit(surf, rect)
-        pg.draw.rect(self.display_surface, (255, 255, 255), hitbox, 3)
-        
-        surf_input = self.font.render(self.alias, False, FONT_COLOR[4])
-        rect_input = surf_input.get_rect(center = (WIDTH // 2, HEIGHT // 2 +350))
-        
-        self.display_surface.blit(surf, rect)
-        self.display_surface.blit(surf_input, rect_input)
-        
-        if not self.can_click and self.mouse_click[0] and hitbox.collidepoint(self.mouse_pos):
-            return True
-    
-    def leaderboard(self):
-        
-        leaderboard_surf = []
-        
-        sorted_leaderboard = sorted(self.leaderboard_list, key = lambda x: x[1], reverse = True)
-        
-        player_list  = 5
-        for player, (alias, score) in enumerate(sorted_leaderboard[:player_list]):
-            text = f'{player + 1}: {alias}: {score}'
-            surf = self.font(text, False, FONT_COLOR[4])
-            leaderboard_surf.append(surf)
+        if self.state == 'menu':
+            if hitbox.collidepoint(self.mouse_pos):
+                surf = self.big_font.render(text, False, FONT_COLOR[0])
+                
+            self.display_surface.blit(surf, rect)
+            pg.draw.rect(self.display_surface, (255, 215, 0), hitbox, 2)
             
-        return leaderboard_surf
+            if hitbox.collidepoint(self.mouse_pos) and self.mouse_press[0] and not self.can_click:
+                pg.quit()
+                exit()
+    
+    def male_button(self):
+        text = '> male <'
+        surf = self.font.render(text, False, FONT_COLOR[4])
+        rect = surf.get_rect(center = (WIDTH // 2 - 300, HEIGHT // 2 + 300))
+        hitbox = rect.inflate(10, 10)
         
-    def character_selection(self):
-        surf = {
-            'MALE' : self.font.render('MALE', False, FONT_COLOR[4]),
-            'FEMALE' : self.font.render('FEMALE', False, FONT_COLOR[4])
-        }
-        rect = {
-            'MALE' : surf['MALE'].get_rect(center = (WIDTH // 2 - 200, HEIGHT // 2)),
-            'FEMALE' : surf['FEMALE'].get_rect(center = (WIDTH // 2 + 200, HEIGHT // 2)),
-        }
-        
-        for character, character_rect in rect.items():
-            hitbox = character_rect.inflate(10, 10)
+        if self.state == 'selection':
             
             if hitbox.collidepoint(self.mouse_pos):
-                surf[character] = self.font.render(character, False, FONT_COLOR[0])
+                surf = self.font.render(text, False, FONT_COLOR[0])
                 
-            self.display_surface.blit(surf[character], character_rect)
-            pg.draw.rect(self.display_surface, (255, 255, 255), hitbox, 3)
+            self.display_surface.blit(surf, rect)
+            pg.draw.rect(self.display_surface, (255, 215, 0), hitbox, 3)
             
-            if not self.can_click and self.mouse_click[0] and hitbox.collidepoint(self.mouse_pos):
-                self.character = character
-                print(self.character)
-                return True
+            if hitbox.collidepoint(self.mouse_pos) and self.mouse_press[0] and not self.can_click:
+                self.state = 'gameplay'
+                self.character = 'MALE'
+    
+    def female_button(self):
+        text = '> female <'
+        surf = self.font.render(text, False, FONT_COLOR[4])
+        rect = surf.get_rect(center = (WIDTH // 2 + 300, HEIGHT // 2 + 300))
+        hitbox = rect.inflate(10, 10)
+        
+        if self.state == 'selection':
             
-    def character_alias(self):
-        
-        surf = self.font.render('ENTER NAME:', False, FONT_COLOR[4])
-        rect = surf.get_rect(center = (WIDTH // 2, HEIGHT // 2 + 200))
-        
-        surf_input = self.font.render(self.alias, False, FONT_COLOR[4])
-        rect_input = surf_input.get_rect(center = (WIDTH // 2, HEIGHT // 2 +350))
-        
-        self.display_surface.blit(surf, rect)
-        self.display_surface.blit(surf_input, rect_input)
+            if hitbox.collidepoint(self.mouse_pos):
+                surf = self.font.render(text, False, FONT_COLOR[0])
+                
+            self.display_surface.blit(surf, rect)
+            pg.draw.rect(self.display_surface, (255, 215, 0), hitbox, 3)
+            
+            if hitbox.collidepoint(self.mouse_pos) and self.mouse_press[0] and not self.can_click:
+                self.state = 'gameplay'
+                self.character = 'FEMALE'
     
-        self.key_input()
+    def character_image(self):
+        image = {
+            'MALE' : pg.transform.scale(pg.image.load('../graphics/test/player_.png').convert_alpha(), (192, 192)),
+            'FEMALE' : pg.transform.scale(pg.image.load('../graphics/test/player.png').convert_alpha(), (192, 192)),
+        }
+        
+        rect = {
+            'MALE' : image['MALE'].get_rect(midbottom = (WIDTH // 2 - 300, HEIGHT // 2 + 75)),
+            'FEMALE' : image['FEMALE'].get_rect(midbottom = (WIDTH // 2 + 300, HEIGHT // 2 + 75)),
+        }
     
-    def display_menu(self):
-        self.input()
+        for image_surf, image_rect in rect.items():
+            self.display_surface.blit(image[image_surf], image_rect)
+    
+    def character_stats(self):
+        male = player_data['male']
+        female = player_data['female']
+        
+#        health = male['health']
+#        stamina = male['stamina']
+#        speed = male['speed']
+#        
+#        health = female['health']
+#        stamina = female['stamina']
+#        speed = female['speed']
+        
+        surf = {
+            '00' : self.font.render(f'Health: {male["health"]}', False, FONT_COLOR[4]),
+            '01' : self.font.render(f'Stamina: {male["stamina"]}', False, FONT_COLOR[4]),
+            '02' : self.font.render(f'Speed: {male["speed"]}', False, FONT_COLOR[4]),
+            
+            '10' : self.font.render(f'Health: {female["health"]}', False, FONT_COLOR[4]),
+            '11' : self.font.render(f'Stamina: {female["stamina"]}', False, FONT_COLOR[4]),
+            '12' : self.font.render(f'Speed: {female["speed"]}', False, FONT_COLOR[4]),
+        }
+    
+        rect = {
+            '00' : surf['00'].get_rect(midleft = (WIDTH // 2 - 375, HEIGHT // 2 +   75 + 90)),
+            '01' :  surf['01'].get_rect(midleft = (WIDTH // 2 - 375, HEIGHT // 2 + 75 + 120 + 10)),
+            '02' :  surf['02'].get_rect(midleft = (WIDTH // 2 - 375, HEIGHT // 2 +   75 + 150 + 10 + 10)),
+            
+            '10' : surf['10'].get_rect(midleft = (WIDTH // 2 + 200, HEIGHT // 2 +   75 + 90)),
+            '11' :  surf['11'].get_rect(midleft = (WIDTH // 2 + 200, HEIGHT // 2 + 75 + 120 + 10)),
+            '12' :  surf['12'].get_rect(midleft = (WIDTH // 2 + 200, HEIGHT // 2 +   75 + 150 + 10 + 10)),
+        }
+        
+        hitbox = {key: rect[key].inflate(10, 10) for key in rect}
+
+        for key, hitbox_rect in hitbox.items():
+            self.display_surface.blit(surf[key], rect[key])
+            pg.draw.rect(self.display_surface, (255, 215, 0), hitbox_rect, 2)
+    
+#        hitbox = {
+#            '00' : rect['00'].inflate(10, 10),
+#            '01' : rect['01'].inflate(10, 10),
+#            '02' : rect['02'].inflate(10, 10),
+#            
+#            '10' : rect['10'].inflate(10, 10),
+#            '11' : rect['11'].inflate(10, 10),
+#            '12' : rect['12'].inflate(10, 10),
+#        }
+#    
+#        for text_surf, text_rect in rect.items():
+#            self.display_surface.blit(surf[text_surf], text_rect)
+#            
+#        for hitbox_rect in hitbox.items():
+#            pg.draw.rect(self.display_surface, (255, 215, 0), hitbox_rect, 2)
+    
+    def update(self):
+        self.handle_event()
         self.cooldown()
-        self.background()
-        self.play_button()
-        self.exit_button()
+        if self.state == 'menu' or self.state == 'selection':
+            self.background(0, 0)
         
-    def display_character_selection(self):
-        self.input()
-        self.cooldown()
-        self.background()
-        self.character_alias()
-        self.character_selection()
-        
-    def display_game_over(self):
-        self.input()
-        self.cooldown()
-        self.background()
-        self.restart_button()
-        
-        leaderboard_surface = self.leaderboard()
-        
-        x, y, gap = WIDTH // 2, HEIGHT // 2, 150
-        for surf in leaderboard_surface:
-            self.display_surface(surf, (x, y))
-            y += gap
+        if self.state == 'menu':
+            self.back_button('selection')
+            self.play_button()
+            self.exit_button()
+            
+        if self.state == 'selection':
+            self.back_button('menu')
+            self.character_image()
+            self.character_stats()
+            self.male_button()
+            self.female_button()
+            
+#        if self.state == 'gameplay':
+#            self.back_button('menu')
