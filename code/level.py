@@ -120,10 +120,14 @@ class Level:
 									self.create_item,
 									)
 							else:
-								if col == '390': monster_name = 'bamboo'
+								if col == '390': monster_name = 'Dwende'
+								elif col == '391': monster_name = 'Engkanto'
+								elif col == '392': monster_name ='Tiyanak'
+								else: monster_name = 'Kapre'
+								""" if col == '390': monster_name = 'bamboo'
 								elif col == '391': monster_name = 'spirit'
 								elif col == '392': monster_name ='raccoon'
-								else: monster_name = 'squid'
+								else: monster_name = 'squid' """
 								Enemy(
 									monster_name,
 									(x,y),
@@ -202,8 +206,9 @@ class Level:
 									offset_y = randint(-50, 50)  # Adjust the offset values as needed
 									spawn_position = (posx + offset_x, posy + offset_y)
 									
-									self.item_player.animation_player.create_particles('molotov',spawn_position,[self.visible_sprites])
-								
+									self.item_player.animation_player.create_particles('molotov',spawn_position,[self.visible_sprites, self.attack_sprites])
+									#self.item_player.molotov(self.player,20,[self.visible_sprites,self.attack_sprites])
+
 	#enemy function
 	def damage_effect(self,attack_type):
 		if attack_type == 'leaf_attack':
@@ -220,8 +225,9 @@ class Level:
 			self.animation_player.create_particles(attack_type,self.player.rect.center,[self.visible_sprites])
 
 	def trigger_death_particles(self,pos,particle_type):
-
-		self.animation_player.create_particles(particle_type,pos,self.visible_sprites)
+		#change for death animation
+		pass
+		#self.animation_player.create_particles(particle_type,pos,self.visible_sprites)
 
 	def add_exp(self,amount):
 		self.player.exp += amount

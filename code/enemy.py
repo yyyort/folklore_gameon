@@ -16,6 +16,9 @@ class Enemy(Entity):
 		self.import_graphics(monster_name)
 		self.status = 'idle'
 		self.image = self.animations[self.status][self.frame_index]
+		#resize the image to TILESIZExTILESIZE
+		self.image = pygame.transform.scale(self.image, (64,64))
+		
 		self.display_surface = pygame.display.get_surface()
 		self.font = pygame.font.Font('../graphics/font/joystix.ttf', 8)
 		self.font_color = (255, 255, 255)
@@ -130,6 +133,8 @@ class Enemy(Entity):
 
 		
 		self.image = animation[int(self.frame_index)]
+		#RESIZE THE IMAGE TO TILESIZExTILESIZE
+		self.image = pygame.transform.scale(self.image, (64,64))
 		self.rect = self.image.get_rect(center = self.hitbox.center)
 
 		if not self.vulnerable:

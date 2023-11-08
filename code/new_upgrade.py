@@ -11,22 +11,43 @@ class NewUpgrade:
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE + 20)
         
         self.cards = []
-        self.weapon_cards = []
+        self.item_cards = []
 
         # card setup
         self.card_pos = [(CARD_WIDTH + CARD_SPACING) * i +
                          CARD_SPACING for i in range(4)]
         self.card_pos_y = [CARD_SPACING for i in range(4)]
+
+        # item card setup below card setup
+        self.item_card_pos = [(CARD_WIDTH + CARD_SPACING) * i +
+                         CARD_SPACING for i in range(3)]
+        self.item_card_pos_y = [CARD_SPACING + CARD_HEIGHT + CARD_SPACING for i in range(3)]
+        
+
         self.card_text = [
             'health',
             'defense',
             'attack',
-            'speed']
+            'speed',
+            ]
+        
+        self.item_text = [
+            'knife',
+            'bolo',
+            'molotov'
+        ]
+
         self.card_value = [
             self.player.health,
             self.player.defense,
             self.player.attack,
             self.player.speed]
+        
+        self.item_value = [
+            1,
+            2,
+            3
+        ]
         
         # weapon card setup
         """ self.weapon_card_pos = [(CARD_WIDTH + CARD_SPACING) * i +
@@ -45,6 +66,11 @@ class NewUpgrade:
         for i in range(len(self.card_pos)):
             self.cards.append(Card((self.card_pos[i], self.card_pos_y[i]),
                               self.card_text[i], self.card_value[i], self.player, self.display_surface))
+            
+    def create_item_cards(self):
+        for i in range(len(self.item_card_pos)):
+            self.item_cards.append(Card((self.item_card_pos[i], self.item_card_pos_y[i]),
+                              self.item_text[i], self.item_value[i], self.player, self.display_surface))
 
     def display_stats(self):
         # display player stats in right of the cards
@@ -67,8 +93,11 @@ class NewUpgrade:
 
     def display(self):
         self.create_cards()
+        self.create_item_cards()
         for card in self.cards:
             card.update()
+        for item_card in self.item_cards:
+            item_card.update()
         
         self.display_stats()
 
@@ -105,6 +134,10 @@ class Card:
         elif text == 'molotov':
             self.icon = pygame.image.load(
                 '../graphics/ui/molotov.png').convert_alpha()
+            
+        #resize icon into card width and height
+        self.icon = pygame.transform.scale(self.icon, (CARD_WIDTH, CARD_HEIGHT))
+
 
         # plus and minus buttons
         self.plus_button = pygame.image.load('../graphics/ui/plus.png').convert_alpha()
@@ -116,12 +149,12 @@ class Card:
 
     def draw(self):
         # draw card
-        pygame.draw.rect(self.display_surface,
+        """ pygame.draw.rect(self.display_surface,
                          CARD_BG_COLOR,
                          (self.pos[0], self.pos[1], CARD_WIDTH, CARD_HEIGHT))
         pygame.draw.rect(self.display_surface,
                          CARD_BORDER_COLOR,
-                         (self.pos[0], self.pos[1], CARD_WIDTH, CARD_HEIGHT), CARD_BORDER)
+                         (self.pos[0], self.pos[1], CARD_WIDTH, CARD_HEIGHT), CARD_BORDER) """
 
         # draw icon center of card
         self.display_surface.blit(self.icon,
