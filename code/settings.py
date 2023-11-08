@@ -30,6 +30,7 @@ TEXT_COLOR = '#EEEEEE'
 HEALTH_COLOR = 'red'
 ENERGY_COLOR = 'blue'
 UI_BORDER_COLOR_ACTIVE = 'gold'
+UI_FONT_COLOR = 'white'
 
 # upgrade menu
 TEXT_COLOR_SELECTED = '#111111'

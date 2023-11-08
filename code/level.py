@@ -7,6 +7,7 @@ from support import *
 from random import choice, randint
 from ui import UI
 from particles import AnimationPlayer
+import json
 
 #player
 from player import Player
@@ -293,9 +294,15 @@ class Level:
 				self.player_attack_logic()
 			
 			#to be changed
-			""" if self.player.health <= 0:
+			if self.player.health <= 0:
+				#write to leaderboard json
+				player_data = {
+					"player"
+				}
+				with open ('leaderboard.json','w') as f:
+					f.write(json.dumps(player_data))
+					f.close()
 				self.state = 'end'
-				self.end.add_to_leaderboard(self.player) """
 
 	def intro_state(self):
 		if self.state == 'intro':
@@ -308,10 +315,10 @@ class Level:
 	def end_state(self):
 		if self.state == 'end':
 			self.end.display(self.player)
-			if self.end.restart_button():
+			""" if self.end.restart_button():
 				self.state = 'intro'
 				#print('test')
-				self.reset()
+				self.reset() """
 
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
