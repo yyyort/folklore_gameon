@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from entity import Entity
 from support import *
+from dialog import Dialog
 
 class Enemy(Entity):
 	def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
@@ -16,6 +17,9 @@ class Enemy(Entity):
 		self.status = 'idle'
 		self.image = self.animations[self.status][self.frame_index]
 		self.display_surface = pygame.display.get_surface()
+		self.font = pygame.font.Font('../graphics/font/joystix.ttf', 8)
+		self.font_color = (255, 255, 255)
+		self.font_background_color = (0, 0, 0)
 
 		# movement
 		self.rect = self.image.get_rect(topleft = pos)
@@ -42,6 +46,9 @@ class Enemy(Entity):
 		self.damage_player = damage_player
 		self.trigger_death_particles = trigger_death_particles
 		self.add_exp = add_exp
+		
+		# dialog
+		self.dialog_data = dialog_data[self.monster_name]
 
 		# invincibility timer
 		self.vulnerable = True
@@ -81,6 +88,7 @@ class Enemy(Entity):
 
 		return (distance,direction)
 
+	#change for status, attack, move, idle, dialog
 	def get_status(self, player):
 		distance = self.get_player_distance_direction(player)[0]
 
@@ -92,6 +100,14 @@ class Enemy(Entity):
 			self.status = 'move'
 		else:
 			self.status = 'idle'
+
+	def dialog(self,player):
+		distance = self.get_player_distance_direction(player)[0]
+
+		if distance <= self.notice_radius:
+			for dialog in self.dialog_data:
+				#draw a dialog rectangle in the screen
+				Dialog().show_dialog(dialog)
 
 	def actions(self,player):
 		if self.status == 'attack':
@@ -112,6 +128,7 @@ class Enemy(Entity):
 				self.can_attack = False
 			self.frame_index = 0
 
+		
 		self.image = animation[int(self.frame_index)]
 		self.rect = self.image.get_rect(center = self.hitbox.center)
 
@@ -189,20 +206,6 @@ class Enemy(Entity):
 			# Blit the health bar surface onto the enemy's image
 			self.image.blit(health_bar_surface, self.health_bar_rect)
 
-
-	""" def draw_health_bar(self):
-		if self.health < self.max_health:
-			# Calculate health ratio
-			ratio = self.health / self.max_health
-			# Calculate width of bar
-			current_width = self.health_bar_width * ratio
-			current_rect = self.health_bar_rect.copy()
-			current_rect.width = current_width
-			# Draw health bar
-			pygame.draw.rect(self.image, self.health_bar_color, current_rect)
-			pygame.draw.rect(self.image, UI_BORDER_COLOR, self.health_bar_rect, 1) """
-
-
 	def update(self):
 		self.hit_reaction()
 		self.move(self.speed)
@@ -210,8 +213,8 @@ class Enemy(Entity):
 		self.cooldowns()
 		self.check_death()
 		self.draw_health_bar()
-		
 
 	def enemy_update(self,player):
 		self.get_status(player)
 		self.actions(player)
+		self.dialog(player)

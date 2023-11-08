@@ -32,7 +32,13 @@ class UI:
 			item = pygame.image.load(item['graphic']).convert_alpha()
 			self.item_graphics.append(item)
 
-
+	def dialog(self, text):
+		text_surf = self.font.render(text,False,TEXT_COLOR)
+		text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0] / 2, self.display_surface.get_size()[1] - 100))
+		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20,20))
+		self.display_surface.blit(text_surf,text_rect)
+		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
+		
 	def show_bar(self,current,max_amount,bg_rect,color):
 		# draw bg 
 		pygame.draw.rect(self.display_surface,UI_BG_COLOR,bg_rect)

@@ -89,7 +89,7 @@ class Projectile(pygame.sprite.Sprite):
         self.direction = direction
 
     def animate(self):
-        print(self.sprite_type)
+        #print(self.sprite_type)
         self.frame_index += self.animation_speed
 
         if self.direction == 'right':
@@ -133,7 +133,7 @@ class gun_projectile(pygame.sprite.Sprite):
         self.direction = direction
 
     def animate(self):
-        print(self.sprite_type)
+        #print(self.sprite_type)
         self.frame_index += self.animation_speed
 
         if self.direction == 'right':

@@ -128,8 +128,26 @@ monster_data = {
 	'spirit': {'health': 100,'exp':110,'damage':8,'attack_type': 'thunder', 'attack_sound':'../audio/attack/fireball.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 60, 'notice_radius': 350},
 	'bamboo': {'health': 70,'exp':120,'damage':6,'attack_type': 'leaf_attack', 'attack_sound':'../audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 50, 'notice_radius': 300}}
 	
+dialog_data = {
+    'squid': {
+        'Ugh, this swampy place gives me the creeps.',
+	},
+    'raccoon': {
+        'Hmm, I sense many restless spirits in this area. Something evil must be drawing them here. Explore'
+	},
+    'spirit': {
+		'Whew, that was tiring.',
+	},
+    'bamboo': {
+        'Ohh?',
+	}
+}
 
+""" monster_data = {
+    'mangkukulam': {'health': 100,'exp':100,'damage':20,'attack_type': 'slash', 'attack_sound':'../audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 360},
+} """
 
+#enemy effect
 """ 
 Tikbalang - Melee (Knockback effects)
  Kapre - Melee (Crippled Effect or Slow)
@@ -137,3 +155,41 @@ Tikbalang - Melee (Knockback effects)
  Engkanto - Melee Normal Mob Tiyanak - Melee
  (May Speed Boost) Multo (Male/Female Ghost) - Melee Normal Mob
  """
+
+#dialog
+""" dialog_data = {
+    'player_start': {
+        'Ugh, this swampy place gives me the creeps.',
+        'I shouldve just stayed back home in Iloilo.', 
+		'Oh well, I took this job to cleanse that woman, so I better get to it, even though I have no idea where to start...',
+		'Explore'
+	},
+	'player_sense': {
+        'Hmm, I sense many restless spirits in this area. Something evil must be drawing them here. Explore'
+	},
+	'player_tired': {
+        'Whew, that was tiring.', 
+		'But why do I feel like there are even more monsters now?',
+		'Something is behind this'
+		'This cant be good...'
+		'Albularyo comes across a Mangkukulam'
+	},
+    'mangkukulam': {
+		'Ohh?',
+        'What an unusual sight',
+        'You dont belong here',
+        'An albularyo that came all the way from Iloilo to act like the hero?',
+        'You should be punished!'
+	},
+    'player_replay': {
+        'How did you even know where I came from Iloilo?'
+	},
+    'mangkukulam_replay': {
+		'Doesnt matter',
+		'Things that dont belong here… We get rid of them',
+		'Same goes to people',
+		'Ohh, how pitiful',
+		'Youre family wont see you for the last time',
+		'Because Capiz will become your grave',
+	}
+} """

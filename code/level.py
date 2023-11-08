@@ -8,7 +8,6 @@ from random import choice, randint
 from ui import UI
 from particles import AnimationPlayer
 
-
 #player
 from player import Player
 from weapon import Weapon
@@ -134,6 +133,11 @@ class Level:
 									self.trigger_death_particles,
 									self.add_exp)
 
+	
+	#write a function where if player is in the range of the enemy, dialogue will appear
+	def create_dialog(self):
+		pass
+
 	#player function
 	def create_attack(self):
 		self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
@@ -178,6 +182,7 @@ class Level:
 							target_sprite.kill()
 						else:
 							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
+							
 
 							#change item effect
 							if attack_sprite.sprite_type == 'gun':
@@ -219,8 +224,11 @@ class Level:
 		self.animation_player.create_particles(particle_type,pos,self.visible_sprites)
 
 	def add_exp(self,amount):
-
 		self.player.exp += amount
+
+	#interaction function
+	def dialog_logic(self):
+		pass
 
 	#ui function
 	def toggle_menu(self):
@@ -296,7 +304,7 @@ class Level:
 			self.end.display(self.player)
 			if self.end.restart_button():
 				self.state = 'intro'
-				print('test')
+				#print('test')
 				self.reset()
 
 class YSortCameraGroup(pygame.sprite.Group):
