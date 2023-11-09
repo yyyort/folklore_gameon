@@ -19,7 +19,8 @@ json format:
  """
 
 class End:
-    def __init__(self):
+    pass
+    """ def __init__(self):
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font(UI_FONT,UI_FONT_SIZE)
         self.leaderboard = {}
@@ -35,7 +36,7 @@ class End:
         for player in self.sorted_players:
             text_surf = self.font.render(f"{player[0]} {player[1]['exp']}",False,TEXT_COLOR)
             text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2 - 100 + self.sorted_players.index(player)*50))
-            self.display_surface.blit(text_surf,text_rect)
+            self.display_surface.blit(text_surf,text_rect) """
 
     
         

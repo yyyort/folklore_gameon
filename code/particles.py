@@ -77,6 +77,39 @@ class AnimationPlayer:
         animation_frames = self.frames[animation_type]
         gun_projectile(pos, animation_frames, groups, direction)
 
+    def create_monster_flame(self, pos, direction, animation_type, groups, damage):
+        animation_frames = self.frames[animation_type]
+        MonsterFlame(pos, direction, animation_frames, groups, damage)
+
+class MonsterFlame(pygame.sprite.Sprite):
+    def __init__(self, pos, direction, animation_frames, groups, damage):
+        super().__init__(groups)
+        self.sprite_type = 'monster_flame'
+        self.frame_index = 0
+        self.animation_speed = 0.15
+        self.frames = animation_frames
+        self.image = self.frames[self.frame_index]
+        self.rect = self.image.get_rect(center=pos)
+        self.direction = direction
+        self.damage = damage
+    
+    def animate(self):
+        #print(self.direction)
+        self.frame_index += self.animation_speed
+        #make flame offset using random
+
+        self.rect.x += self.direction.x * 5
+        self.rect.y += self.direction.y * 5 
+
+        if self.frame_index >= len(self.frames):
+            self.kill()
+        else:
+            self.image = self.frames[int(self.frame_index)]
+
+    def update(self):
+        self.animate()
+        
+
 class Projectile(pygame.sprite.Sprite):
     def __init__(self, pos, animation_frames, groups, direction):
         super().__init__(groups)

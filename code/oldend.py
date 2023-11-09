@@ -1,6 +1,5 @@
 import pygame
 from settings import *
-import json
 
 class End:
     def __init__(self):
@@ -8,13 +7,6 @@ class End:
         self.font = pygame.font.Font(UI_FONT,UI_FONT_SIZE)
         self.click_time = None
         self.can_click = True   
-
-        with open('leaderboard.json','r') as f:
-            self.leaderboard = json.load(f)
-            f.close()
-            
-        self.leaderboard = sorted(self.leaderboard,key=lambda x:x['exp'],reverse=True)
-            #print(self.leaderboard)
   
     def click_cooldown(self):
         if not self.can_click:
@@ -27,11 +19,6 @@ class End:
 
     def show_leaderboard(self):
       pass
-
-    """ for player in self.leaderboard:
-              text_surf = self.font.render(f"{player['name']} {player['exp']}",False,TEXT_COLOR)
-              text_rect = text_surf.get_rect(center = (self.display_surface.get_size()[0]//2,self.display_surface.get_size()[1]//2 - 100 + self.leaderboard.index(player)*50))
-              self.display_surface.blit(text_surf,text_rect) """
 
     def current_player(self,player):
         text_surf = self.font.render(f"{player.name} {player.exp}",False,TEXT_COLOR)

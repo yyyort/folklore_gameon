@@ -42,6 +42,8 @@ class Level:
 		self.current_attack = None
 		self.attack_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
+		self.enemy_attack_sprites = pygame.sprite.Group()	
+		self.player_sprites = pygame.sprite.Group()
 
 		# sprite setup
 		self.create_map()
@@ -112,7 +114,7 @@ class Level:
 							if col == '394':
 								self.player = Player(
 									(x,y),
-									[self.visible_sprites],
+									[self.visible_sprites, self.player_sprites],
 									self.obstacle_sprites,
 									self.create_attack,
 									self.destroy_attack,
@@ -135,9 +137,10 @@ class Level:
 									[self.visible_sprites,self.attackable_sprites],
 									self.obstacle_sprites,
 									self.damage_player,
+									self.enemy_magic_player,
 									self.trigger_death_particles,
 									self.add_exp)
-
+								
 	
 	#write a function where if player is in the range of the enemy, dialogue will appear
 	def create_dialog(self):
@@ -187,6 +190,7 @@ class Level:
 							target_sprite.kill()
 						else:
 							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
+						
 							
 
 							#change item effect
@@ -200,7 +204,7 @@ class Level:
 									
 								for _ in range(10):	
 									
-									target_sprite.skill_damage(self.player,20, 2000)
+									#target_sprite.skill_damage(self.player,20, 2000)
 									
 									# Calculate a random position around the projectile's center
 									offset_x = randint(-50, 50)  # Adjust the offset values as needed
@@ -224,6 +228,34 @@ class Level:
 			self.player.vulnerable = False
 			self.player.hurt_time = pygame.time.get_ticks()
 			self.animation_player.create_particles(attack_type,self.player.rect.center,[self.visible_sprites])
+
+	def enemy_magic_player(self,amount,attack_type, pos, direction, can_attack):
+		if can_attack and self.player.vulnerable:
+			#self.damage_effect(attack_type)
+			#self.player.vulnerable = False
+			#self.player.hurt_time = pygame.time.get_ticks()
+			self.animation_player.create_monster_flame(pos,
+											   		direction,
+												 	attack_type,
+												   	[self.visible_sprites, self.enemy_attack_sprites],
+													amount)
+			#q: how can i fix so that create_monster_flame will be called once only?
+			#a: create a new function for enemy magic player
+
+
+	def enemy_attack_logic(self):
+		if self.enemy_attack_sprites:
+			for enemy_attack in self.enemy_attack_sprites:
+				collision_sprites = pygame.sprite.spritecollide(enemy_attack,self.player_sprites,False)
+				if collision_sprites:
+					if self.player.vulnerable:
+						self.damage_effect(enemy_attack.sprite_type)
+						print(enemy_attack.sprite_type)
+						self.player.vulnerable = False
+						self.player.health -= enemy_attack.damage
+						self.player.hurt_time = pygame.time.get_ticks()
+						
+						enemy_attack.kill()
 
 	def trigger_death_particles(self,pos,particle_type):
 		#change for death animation
@@ -292,9 +324,10 @@ class Level:
 				self.visible_sprites.update()
 				self.visible_sprites.enemy_update(self.player)
 				self.player_attack_logic()
+				self.enemy_attack_logic()
 			
 			#to be changed
-			if self.player.health <= 0:
+			""" if self.player.health <= 0:
 				#write to leaderboard json
 				player_data = {
 					"player"
@@ -302,7 +335,7 @@ class Level:
 				with open ('leaderboard.json','w') as f:
 					f.write(json.dumps(player_data))
 					f.close()
-				self.state = 'end'
+				self.state = 'end' """
 
 	def intro_state(self):
 		if self.state == 'intro':

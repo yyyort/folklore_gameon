@@ -1,12 +1,29 @@
 import pygame
 from math import sin
 
+
 class Entity(pygame.sprite.Sprite):
 	def __init__(self,groups):
 		super().__init__(groups)
 		self.frame_index = 0
 		self.animation_speed = 0.15
 		self.direction = pygame.math.Vector2()
+		""" self.facing_direction = 'down'
+
+	def get_facing_direction(self, direction):
+		# horizontal check
+		if direction.x > direction.y:
+			if direction.x > 0:
+				self.facing_direction = 'right'
+			elif direction.x < 0:
+				self.facing_direction = 'left'
+		# vertical check
+		else:
+			if direction.y > 0:
+				self.facing_direction = 'down'
+			elif direction.y < 0:
+				self.facing_direction = 'up' """
+		
 
 	def move(self,speed):
 		if self.direction.magnitude() != 0:
