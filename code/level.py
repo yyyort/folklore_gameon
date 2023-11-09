@@ -30,9 +30,9 @@ class Level:
         
     def create_map(self):
         layouts = {
-            'outer_border' : import_csv('../map/map_bounderies_lower.csv'),
-            'inner_border' : import_csv('../map/map_bounderies_upper.csv'),
-            'entities' : import_csv('../map/map_entities.csv')
+            'outer_border' : import_csv('../folklore/layout/_boundary.csv'),
+#            'inner_border' : import_csv('../map/map_bounderies_upper.csv'),
+            'entities' : import_csv('../folklore/layout/_entity.csv')
         }
         
         for style, layout in layouts.items():
@@ -43,10 +43,10 @@ class Level:
                     if col != '-1':
                         if style == 'outer_border':
                             Tile((x, y), [self.obstacle_sprites], 'outer_border')
-                        if style == 'inner_border':
-                            Tile((x, y), [self.obstacle_sprites], 'inner_border')
+#                        if style == 'inner_border':
+#                            Tile((x, y), [self.obstacle_sprites], 'inner_border')
                         if style == 'entities':
-                            if col == '394':
+                            if col == '15':
                                 self.player = Player((x, y),
                                                      [self.visible_sprites],
                                                      self.obstacle_sprites)
