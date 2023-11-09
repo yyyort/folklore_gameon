@@ -67,9 +67,9 @@ class Level:
 
 	def create_map(self):
 		layouts = {
-			'outer_wall': import_csv_layout('../map/map_bounderies_lower.csv'),
-			'inner_wall': import_csv_layout('../map/map_bounderies_upper.csv'),
-			'entities': import_csv_layout('../map/map_entity_objects.csv')
+			'outer_wall': import_csv_layout('../map/new_tilemap/map_Wall_Floor.csv'),
+#			'inner_wall': import_csv_layout('../map/new_tilemap/map_Mini_Floor.csv'),
+			'entities': import_csv_layout('../map/new_tilemap/map_Entity_Floor.csv')
 		}
 		graphics = {
 			'grass': import_folder('../graphics/grass'),
@@ -109,7 +109,7 @@ class Level:
 							Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'object',surf)
 
 						if style == 'entities':
-							if col == '394':
+							if col == '15':
 								self.player = Player(
 									(x,y),
 									[self.visible_sprites],
@@ -121,10 +121,10 @@ class Level:
 									self.create_item,
 									)
 							else:
-								if col == '390': monster_name = 'Dwende'
-								elif col == '391': monster_name = 'Engkanto'
-								elif col == '392': monster_name ='Tiyanak'
-								else: monster_name = 'Kapre'
+								if col == '13': monster_name = 'Kapre'
+								elif col == '14': monster_name = 'Engkanto'
+								elif col == '12': monster_name ='Tiyanak'
+								else: monster_name = 'Dwende'
 								""" if col == '390': monster_name = 'bamboo'
 								elif col == '391': monster_name = 'spirit'
 								elif col == '392': monster_name ='raccoon'
@@ -333,7 +333,7 @@ class YSortCameraGroup(pygame.sprite.Group):
 		# creating the floor
 		#self.floor_surf = pygame.image.load('../graphics/tilemap/ground.png').convert()
 		#changed
-		self.floor_surf = pygame.image.load('../graphics/tilemap/map_image/map_5.png').convert()
+		self.floor_surf = pygame.image.load('../graphics/tilemap/map_image/map_6.png').convert()
 		self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
 
 	def custom_draw(self,player):

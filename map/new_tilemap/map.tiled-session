@@ -1,0 +1,96 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "C:/Users/PC/Documents/tile_projects/game_on/map_concept_1/map.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "C:/Users/PC/Documents/GDSC_USA/CODEs/GameOn_2/folklore_gameon/map/new_map/Floor.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/PC/Documents/GDSC_USA/CODEs/GameOn_2/folklore_gameon/map/new_map/Floor_Set_1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/PC/Documents/GDSC_USA/CODEs/GameOn_2/folklore_gameon/map/new_map/map.tmx": {
+            "scale": 0.0625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3312,
+                "y": 3960
+            }
+        },
+        "C:/Users/PC/Documents/tile_projects/game_on/map_concept_1/bridge_tile_set.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/PC/Documents/tile_projects/game_on/map_concept_1/floor_swamp_tile_set.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/PC/Documents/tile_projects/game_on/map_concept_1/floor_tile_set.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/PC/Documents/tile_projects/game_on/map_concept_1/floor_water_swamp_tile.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/PC/Documents/tile_projects/game_on/map_concept_1/map.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3514,
+                "y": 3696
+            }
+        },
+        "Floor.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Floor_Set_1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TilesetFloor.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "map.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 4009.090909090909,
+                "y": 3540.909090909091
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/Users/PC/Documents/GDSC_USA/CODEs/GameOn_1/folklore_gameon/map",
+    "last.imagePath": "C:/Users/PC/Documents/GDSC_USA/CODEs/GameOn_1/folklore_gameon/graphics/tilemap",
+    "map.height": 124,
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 124,
+    "openFiles": [
+        "map.tmx",
+        "C:/Users/PC/Documents/GDSC_USA/CODEs/GameOn_2/folklore_gameon/map/new_map/map.tmx",
+        "C:/Users/PC/Documents/GDSC_USA/CODEs/GameOn_2/folklore_gameon/map/new_map/Floor_Set_1.tsx",
+        "C:/Users/PC/Documents/tile_projects/game_on/map_concept_1/map.tmx"
+    ],
+    "project": "map.tiled-project",
+    "recentFiles": [
+        "map.tmx",
+        "C:/Users/PC/Documents/GDSC_USA/CODEs/GameOn_2/folklore_gameon/map/new_map/map.tmx",
+        "C:/Users/PC/Documents/GDSC_USA/CODEs/GameOn_2/folklore_gameon/map/new_map/Floor_Set_1.tsx",
+        "C:/Users/PC/Documents/tile_projects/game_on/map_concept_1/map.tmx",
+        "Floor_Set_1.tsx",
+        "Floor.tsx",
+        "TilesetFloor.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 64,
+        "width": 64
+    }
+}
