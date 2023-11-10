@@ -162,7 +162,7 @@ monster_data = {
         'exp':250,
         'damage':40,
         'attack_cooldown': 2000, 
-        'attack_type': 'magic',
+        'attack_type': 'claw', # error is attack_type is 'magic' particles.py line 81 'in create_monster_flame animation_frames = self.frames[animation_type] KeyError: 'magic''
         'attack_sound':'../audio/attack/claw.wav',
         'speed': 2,
         'resistance': 3,
