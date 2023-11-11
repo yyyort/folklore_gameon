@@ -57,25 +57,26 @@ class ItemPlayer:
             self.animation_player.create_projectile('molotov', (x, y), groups, player.status.split('_')[0]) """
 
     def gun(self, player, cost, groups):
-        if player.energy >= cost:
-            player.energy -= cost
+        if player.energy >= 50:
+            if player.energy >= cost:
+                player.energy -= cost
 
-        if player.status.split('_')[0] == 'right':
-              direction = pygame.math.Vector2(1,0)
+            if player.status.split('_')[0] == 'right':
+                direction = pygame.math.Vector2(1,0)
 
-        elif player.status.split('_')[0] == 'left': direction = pygame.math.Vector2(-1,0)
-        elif player.status.split('_')[0] == 'up': direction = pygame.math.Vector2(0,-1)
-        else: direction = pygame.math.Vector2(0,1)
+            elif player.status.split('_')[0] == 'left': direction = pygame.math.Vector2(-1,0)
+            elif player.status.split('_')[0] == 'up': direction = pygame.math.Vector2(0,-1)
+            else: direction = pygame.math.Vector2(0,1)
 
-        #move the projectile
-        x = player.rect.centerx 
-        y = player.rect.centery
+            #move the projectile
+            x = player.rect.centerx 
+            y = player.rect.centery
 
 
-        if direction.x:
-            x = player.rect.centerx + (TILESIZE * 3) * direction.x
-            self.animation_player.create_gun_projectile('gun',(x,y),groups, player.status.split('_')[0])
-        else:
-            y = player.rect.centery + (TILESIZE * 3) * direction.y
-            self.animation_player.create_gun_projectile('gun',(x,y),groups, player.status.split('_')[0])
+            if direction.x:
+                x = player.rect.centerx + (TILESIZE * 3) * direction.x
+                self.animation_player.create_gun_projectile('gun',(x,y),groups, player.status.split('_')[0])
+            else:
+                y = player.rect.centery + (TILESIZE * 3) * direction.y
+                self.animation_player.create_gun_projectile('gun',(x,y),groups, player.status.split('_')[0])
                 

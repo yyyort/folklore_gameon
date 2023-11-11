@@ -146,29 +146,27 @@ class Player(Entity):
 					self.weapon_attack_sound.play()
 					self.energy -= 10
      
-			if self.energy <= 0:
-				self.can_attack = False
-			else:
-				self.can_attack = True
       
 			# magic input 
 			if keys[pygame.K_LCTRL]:
-				self.attacking = True
-				self.attack_time = pygame.time.get_ticks()
-				style = list(magic_data.keys())[self.magic_index]
-				strength = list(magic_data.values())[self.magic_index]['strength'] + self.stats['attack']
-				cost = list(magic_data.values())[self.magic_index]['cost']
-				self.create_magic(style,strength,cost)
+				if self.can_attack:
+					self.attacking = True
+					self.attack_time = pygame.time.get_ticks()
+					style = list(magic_data.keys())[self.magic_index]
+					strength = list(magic_data.values())[self.magic_index]['strength'] + self.stats['attack']
+					cost = list(magic_data.values())[self.magic_index]['cost']
+					self.create_magic(style,strength,cost)
 
 			#item input
 			if keys[pygame.K_LSHIFT]:
-				self.attacking = True
-				self.create_item()
-				self.attack_time = pygame.time.get_ticks()
-				style = list(item_data.keys())[self.item_index]
-				strength = list(item_data.values())[self.item_index]['strength']
-				cost = list(item_data.values())[self.item_index]['cost']
-				self.use_item(style,strength,cost)
+				if self.can_attack:
+					self.attacking = True
+					self.create_item()
+					self.attack_time = pygame.time.get_ticks()
+					style = list(item_data.keys())[self.item_index]
+					strength = list(item_data.values())[self.item_index]['strength']
+					cost = list(item_data.values())[self.item_index]['cost']
+					self.use_item(style,strength,cost)
 
 			# switch weapon input
 			if keys[pygame.K_q] and self.can_switch_weapon:
@@ -206,6 +204,11 @@ class Player(Entity):
 
 				self.item = list(item_data.keys())[self.item_index]
 
+			if self.energy <= 0:
+				self.can_attack = False
+			else:
+				self.can_attack = True
+    
 			if keys[pygame.K_0]:
 				self.health = 0
 
@@ -303,6 +306,9 @@ class Player(Entity):
 		return list(self.upgrade_cost.values())[index]
 
 	def energy_recovery(self):
+		if self.energy <= 0:
+			self.energy = 1
+     
 		if self.energy < self.stats['energy']:
 			self.energy += 0.1 * 1.50 # * self.stats['magic']
 		else:

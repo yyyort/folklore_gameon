@@ -1,6 +1,11 @@
+import pygame
+
+pygame.init()
 # game setup
-WIDTH    = 1280	
-HEIGTH   = 720
+
+
+WIDTH    = pygame.display.Info().current_w
+HEIGTH   = pygame.display.Info().current_h
 FPS      = 60
 TILESIZE = 64
 HITBOX_OFFSET = {
@@ -166,8 +171,8 @@ monster_data = {
     'Dwende': {
         'health': 100,
         'exp':100,
-        'damage':20,
-        'attack_cooldown': 2000, 
+        'damage':9,
+        'attack_cooldown': 5000, 
         'attack_type': 'flame',
         'attack_sound':'../audio/attack/slash.wav',
         'speed': 3,
@@ -179,19 +184,19 @@ monster_data = {
         'health': 300,
         'exp':250,
         'damage':40,
-        'attack_cooldown': 2000, 
+        'attack_cooldown': 3000, 
         'attack_type': 'claw', # error is attack_type is 'magic' particles.py line 81 'in create_monster_flame animation_frames = self.frames[animation_type] KeyError: 'magic''
         'attack_sound':'../audio/attack/claw.wav',
         'speed': 2,
         'resistance': 3,
         'attack_radius': 120,
-        'score' : 40,
+        'score' : 100,
         'notice_radius': 400},
     'Kapre': {
         'health': 100,
         'exp':110,
-        'damage':8,
-        'attack_cooldown': 1000, 
+        'damage':12,
+        'attack_cooldown': 7000, 
         'attack_type': 'claw',
         'attack_sound':'../audio/attack/fireball.wav',
         'score' : 50,

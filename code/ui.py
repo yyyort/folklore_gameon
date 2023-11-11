@@ -38,7 +38,7 @@ class UI:
 		y = self.display_surface.get_size()[1] - 20
 		text_rect = text_surf.get_rect(bottomright = (x,y))
 
-		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20,20))
+		pygame.draw.rect(self.display_surface,(255, 255, 255),text_rect.inflate(20,20))
 		self.display_surface.blit(text_surf,text_rect)
 		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
   
@@ -48,7 +48,7 @@ class UI:
 		y = self.display_surface.get_size()[1] - 70
 		text_rect = text_surf.get_rect(bottomright = (x,y))
 
-		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20,20))
+		pygame.draw.rect(self.display_surface,(255, 255, 255),text_rect.inflate(20,20))
 		self.display_surface.blit(text_surf,text_rect)
 		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
 	
@@ -58,7 +58,7 @@ class UI:
 			y = 20
 			text_rect = text_surf.get_rect(topleft = (x,y))
 	
-			pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20, 20))
+			pygame.draw.rect(self.display_surface,(255, 255, 255),text_rect.inflate(20, 20))
 			self.display_surface.blit(text_surf, text_rect)
 			pygame.draw.rect(self.display_surface,UI_BORDER_COLOR, text_rect.inflate(20,20),3)
   
@@ -68,7 +68,7 @@ class UI:
 		y = 70
 		text_rect = text_surf.get_rect(topleft = (x,y))
   
-		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20, 20))
+		pygame.draw.rect(self.display_surface,(255, 255, 255),text_rect.inflate(20, 20))
 		self.display_surface.blit(text_surf, text_rect)
 		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR, text_rect.inflate(20,20),3)
 
@@ -84,14 +84,14 @@ class UI:
 		return bg_rect
 
 	def weapon_overlay(self,weapon_index,has_switched):
-		bg_rect = self.selection_box(10,630,has_switched)
+		bg_rect = self.selection_box(10,HEIGTH - 100,has_switched)
 		weapon_surf = self.weapon_graphics[weapon_index]
 		weapon_rect = weapon_surf.get_rect(center = bg_rect.center)
 
 		self.display_surface.blit(weapon_surf,weapon_rect)
 
 	def magic_overlay(self,magic_index,has_switched):
-		bg_rect = self.selection_box(90,630,has_switched)
+		bg_rect = self.selection_box(90,HEIGTH - 100,has_switched)
 		magic_surf = self.magic_graphics[magic_index]
 		magic_rect = magic_surf.get_rect(center = bg_rect.center)
 
@@ -99,7 +99,7 @@ class UI:
 	
 	#changed
 	def item_overlay(self,item_index,has_switched):
-		bg_rect = self.selection_box(160,630,has_switched)
+		bg_rect = self.selection_box(160,HEIGTH - 100,has_switched)
 		item_surf = self.item_graphics[item_index]
 		item_rect = item_surf.get_rect(center = bg_rect.center)
 
