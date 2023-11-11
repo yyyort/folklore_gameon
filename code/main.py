@@ -31,12 +31,12 @@ class Game:
 							self.level.intro.input = self.level.intro.input[:-1]
 						else:
 							self.level.intro.input += event.unicode
-				if self.level.state == 'game':
-					if event.type == pygame.KEYDOWN:
-						if event.key == pygame.K_m:
-							self.level.toggle_menu()
-						if event.key == pygame.K_ESCAPE:
-							self.level.toggle_upgrade()
+#				if self.level.state == 'game':
+#					if event.type == pygame.KEYDOWN:
+#						if event.key == pygame.K_m:
+#							self.level.toggle_menu()
+#						if event.key == pygame.K_ESCAPE:
+#							self.level.toggle_upgrade()
        
 			self.screen.fill(WATER_COLOR)
 			self.level.run()

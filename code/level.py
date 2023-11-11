@@ -331,7 +331,7 @@ class Level:
 				self.state = 'game'
      
 		elif self.state == 'game_over':
-			self.end.display()
+			self.end.display(self.player)
 			if self.end.restart_button():
 				self.reset()
      
