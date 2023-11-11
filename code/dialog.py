@@ -4,7 +4,7 @@ from settings import *
 class Dialog:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
-        self.font = pygame.font.Font('graphics/font/joystix.ttf', 8)
+        self.font = pygame.font.Font('../graphics/font/joystix.ttf', 8)
         self.font_color = (255, 255, 255)
         self.font_background_color = (0, 0, 0)
 
