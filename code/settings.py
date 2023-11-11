@@ -63,21 +63,38 @@ attack
 speed
  """
 
-#player
-male_player_data = {
-	'health': 100,
+defualt_player_data = {
+    'health': 100,
     'energy':60,
 	'defense': 10,
     'attack': 10,
 	'speed': 5,
+    'exp' : 0,
+    'level' : 0,
+    'exp_cap' : 15,
+}
+
+#player
+male_player_data = {
+	'health': 100,
+    'energy':60,
+	'defense': 15,
+    'attack': 20,
+	'speed': 5,
+    'exp' : 0,
+    'level' : 0,
+    'exp_cap' : 15,
 }
 
 female_player_data = {
 	'health': 80,
-    'energy':80,
-	'defense': 8,
+    'energy':100,
+	'defense': 5,
 	'attack': 8,
 	'speed': 7,
+    'exp' : 0,
+    'level' : 0,
+    'exp_cap' : 15,
 }
 
 # player
@@ -92,8 +109,8 @@ female_player_data = {
 female_player_data = {
 	'health': 80,
 	'energy':80,
-	'attack': 8,
-	'magic': 6,
+	'attack': 5,
+	'magic': 10,
 	'speed': 7
 } """
 
@@ -109,25 +126,25 @@ weapon_data = {
 magic_data = {
 	'flame': {'strength': 5,'cost': 20,'graphic':'../graphics/particles/flame/fire.png'},
 	'heal' : {'strength': 20,'cost': 10,'graphic':'../graphics/particles/heal/heal.png'},
-    'normal': {'strength': 1,'cost': 1,'graphic':'../graphics/particles/flame/fire.png'},
+    'normal': {'strength': 1,'cost': 25,'graphic':'../graphics/particles/flame/fire.png'},
 	}
 
 #item
 item_data = {
-	'molotov': {'strength': 5,'cost': 1,'graphic':'../graphics/particles/molotov/molotov.png'},
-    'gun': {'strength': 5,'cost': 1,'graphic':'../graphics/items/gun.png'},
+	'molotov': {'strength': 5,'cost': 10,'graphic':'../graphics/particles/molotov/molotov.png'},
+    'gun': {'strength': 50,'cost': 50,'graphic':'../graphics/items/gun.png'},
 }
 
 throwable_item_data = {
-	'molotov': {'strength': 5,'cost': 1,'graphic':'../graphics/particles/molotov/molotov.png'},
+	'molotov': {'strength': 5,'cost': 10,'graphic':'../graphics/particles/molotov/molotov.png'},
 }
 
 # enemy
 """ monster_data = {
-	'squid': {'health': 100,'exp':100,'damage':20,'attack_type': 'slash', 'attack_sound':'../audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 360},
-	'raccoon': {'health': 300,'exp':250,'damage':40,'attack_type': 'claw',  'attack_sound':'../audio/attack/claw.wav','speed': 2, 'resistance': 3, 'attack_radius': 120, 'notice_radius': 400},
-	'spirit': {'health': 100,'exp':110,'damage':8,'attack_type': 'thunder', 'attack_sound':'../audio/attack/fireball.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 60, 'notice_radius': 350},
-	'bamboo': {'health': 70,'exp':120,'damage':6,'attack_type': 'leaf_attack', 'attack_sound':'../audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 50, 'notice_radius': 300}}
+	'squid': {'health': 100,'exp':100, score : '10', 'damage':20,'attack_type': 'slash', 'attack_sound':'../audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 360},
+	'raccoon': {'health': 300,'exp':250, score : '10''damage':40,'attack_type': 'claw',  'attack_sound':'../audio/attack/claw.wav','speed': 2, 'resistance': 3, 'attack_radius': 120, 'notice_radius': 400},
+	'spirit': {'health': 100,'exp':110, score : '10''damage':8,'attack_type': 'thunder', 'attack_sound':'../audio/attack/fireball.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 60, 'notice_radius': 350},
+	'bamboo': {'health': 70,'exp':120, score : '10''damage':6,'attack_type': 'leaf_attack', 'attack_sound':'../audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 50, 'notice_radius': 300}}
 	 """
 
 dialog_data = {
@@ -156,6 +173,7 @@ monster_data = {
         'speed': 3,
         'resistance': 3,
         'attack_radius': 200,
+        'score' : 25,
         'notice_radius': 360},
     'Engkanto': {
         'health': 300,
@@ -167,6 +185,7 @@ monster_data = {
         'speed': 2,
         'resistance': 3,
         'attack_radius': 120,
+        'score' : 40,
         'notice_radius': 400},
     'Kapre': {
         'health': 100,
@@ -175,6 +194,7 @@ monster_data = {
         'attack_cooldown': 1000, 
         'attack_type': 'claw',
         'attack_sound':'../audio/attack/fireball.wav',
+        'score' : 50,
         'speed': 4, 'resistance': 3, 'attack_radius': 60, 'notice_radius': 350},
 
 	'Tiyanak': {
@@ -187,7 +207,9 @@ monster_data = {
         'speed': 3,
         'resistance': 3,
         'attack_radius': 50,
-        'notice_radius': 300}
+        'notice_radius': 300,
+        'score' : 10,
+        }
 }
 
 

@@ -60,9 +60,10 @@ class Intro:
         self.display_surface.blit(input_surf,input_rect)
 
     def display_male(self):
-        image = pygame.image.load('../graphics/test/player.png').convert_alpha()
-        image_rect = image.get_rect(center = (self.display_surface.get_size()[0]//2 - 50,self.display_surface.get_size()[1]//2 + 100))
-        self.display_surface.blit(image,image_rect)
+        image = pygame.image.load('../graphics/test/player_1.png').convert_alpha()
+        image_scale = pygame.transform.scale(image, (TILESIZE, TILESIZE))
+        image_rect = image_scale.get_rect(center = (self.display_surface.get_size()[0]//2 - 50,self.display_surface.get_size()[1]//2 + 100))
+        self.display_surface.blit(image_scale,image_rect)
         
     def display_female(self):
         image = pygame.image.load('../graphics/test/player.png').convert_alpha()
@@ -76,7 +77,7 @@ class Intro:
         energy = self.font.render('Energy: 60',False,TEXT_COLOR)
         energy_rect = energy.get_rect(center = (self.display_surface.get_size()[0]//2 - 200,self.display_surface.get_size()[1]//2 + 120))
         self.display_surface.blit(energy,energy_rect)
-        attack = self.font.render('Attack: 10',False,TEXT_COLOR)
+        attack = self.font.render('Attack: 20',False,TEXT_COLOR)
         attack_rect = attack.get_rect(center = (self.display_surface.get_size()[0]//2 - 200,self.display_surface.get_size()[1]//2 + 140))
         self.display_surface.blit(attack,attack_rect)
         magic = self.font.render('Magic: 4',False,TEXT_COLOR)
@@ -90,16 +91,16 @@ class Intro:
         health = self.font.render('Health: 80',False,TEXT_COLOR)
         health_rect = health.get_rect(center = (self.display_surface.get_size()[0]//2 + 200,self.display_surface.get_size()[1]//2 + 100))
         self.display_surface.blit(health,health_rect)
-        energy = self.font.render('Energy: 80',False,TEXT_COLOR)
+        energy = self.font.render('Energy: 100',False,TEXT_COLOR)
         energy_rect = energy.get_rect(center = (self.display_surface.get_size()[0]//2 + 200,self.display_surface.get_size()[1]//2 + 120))
         self.display_surface.blit(energy,energy_rect)
-        attack = self.font.render('Attack: 8',False,TEXT_COLOR)
+        attack = self.font.render('Attack: 5',False,TEXT_COLOR)
         attack_rect = attack.get_rect(center = (self.display_surface.get_size()[0]//2 + 200,self.display_surface.get_size()[1]//2 + 140))
         self.display_surface.blit(attack,attack_rect)
-        magic = self.font.render('Magic: 6',False,TEXT_COLOR)
+        magic = self.font.render('Magic: 10',False,TEXT_COLOR)
         magic_rect = magic.get_rect(center = (self.display_surface.get_size()[0]//2 + 200,self.display_surface.get_size()[1]//2 + 160))
         self.display_surface.blit(magic,magic_rect)
-        speed = self.font.render('Speed: 6',False,TEXT_COLOR)
+        speed = self.font.render('Speed: 7',False,TEXT_COLOR)
         speed_rect = speed.get_rect(center = (self.display_surface.get_size()[0]//2 + 200,self.display_surface.get_size()[1]//2 + 180))
         self.display_surface.blit(speed,speed_rect)
 

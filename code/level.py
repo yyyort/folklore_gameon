@@ -25,7 +25,7 @@ from enemy import Enemy
 
 #game states
 from intro import Intro
-from end import End
+from oldend import End
 
 class Level:
 	def __init__(self):
@@ -63,7 +63,7 @@ class Level:
 		self.enemy = []
 
 		#phases
-		self.state = 'game'
+		self.state = 'menu'
 		self.intro = Intro()
 		self.end = End()
 
@@ -139,7 +139,8 @@ class Level:
 									self.damage_player,
 									self.enemy_magic_player,
 									self.trigger_death_particles,
-									self.add_exp)
+									self.add_exp,
+         							self.add_score)
 								
 	
 	#write a function where if player is in the range of the enemy, dialogue will appear
@@ -264,6 +265,9 @@ class Level:
 
 	def add_exp(self,amount):
 		self.player.exp += amount
+  
+	def add_score(self, amount):
+		self.player.score += amount
 
 	#interaction function
 	def dialog_logic(self):
@@ -280,7 +284,7 @@ class Level:
 
 	#game state function
 	def reset(self):
-		#reset everthing
+
 		# get the display surface 
 		self.display_surface = pygame.display.get_surface()
 		self.game_paused = False
@@ -293,6 +297,8 @@ class Level:
 		self.current_attack = None
 		self.attack_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
+		self.enemy_attack_sprites = pygame.sprite.Group()	
+		self.player_sprites = pygame.sprite.Group()
 
 		# sprite setup
 		self.create_map()
@@ -304,16 +310,34 @@ class Level:
 
 		# particles
 		self.animation_player = AnimationPlayer()
-		self.magic_player = MagicPlayer(self.animation_player)
 
-		#intro
+		self.magic_player = MagicPlayer(self.animation_player)
+		self.item_player = ItemPlayer(self.animation_player)
+
+		#enemy
+		self.enemy = []
+
+		#phases
+		self.state = 'menu'
 		self.intro = Intro()
 		self.end = End()
 
 	def run(self):
-		if self.state == 'game':
+     
+		if self.state == 'menu':
+			self.intro.display()
+			if self.intro.start_button():
+				self.player.get_character(self.intro.select)
+				self.state = 'game'
+     
+		elif self.state == 'game_over':
+			self.end.display()
+			if self.end.restart_button():
+				self.reset()
+     
+		elif self.state == 'game':
 			self.visible_sprites.custom_draw(self.player)
-			self.ui.display(self.player, self.enemy)
+			self.ui.display(self.player)
 			#print(self.player.debuffs)
 			
 			if self.game_paused:
@@ -325,17 +349,11 @@ class Level:
 				self.visible_sprites.enemy_update(self.player)
 				self.player_attack_logic()
 				self.enemy_attack_logic()
-    
-			#to be changed
-			""" if self.player.health <= 0:
-				#write to leaderboard json
-				player_data = {
-					"player"
-				}
-				with open ('leaderboard.json','w') as f:
-					f.write(json.dumps(player_data))
-					f.close()
-				self.state = 'end' """
+
+		if self.player.health <= 0:
+			self.state = 'game_over'
+
+		debug(self.player.health, 400, 400)
 
 	def intro_state(self):
 		if self.state == 'intro':

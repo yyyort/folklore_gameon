@@ -1,7 +1,6 @@
 import pygame, sys
 from settings import *
 from level import Level
-from intro import Intro
 
 class Game:
 	def __init__(self):
@@ -40,16 +39,7 @@ class Game:
 							self.level.toggle_upgrade()
        
 			self.screen.fill(WATER_COLOR)
-
-			if self.level.state == 'intro':
-				self.level.intro_state()
-
-			if self.level.state == 'end':
-				self.level.end_state()
-
-			if self.level.state == 'game':
-				self.level.run()
-				
+			self.level.run()
 
 			pygame.display.flip()
 			self.clock.tick(FPS)
@@ -57,3 +47,6 @@ class Game:
 if __name__ == '__main__':
 	game = Game()
 	game.run()
+ 
+print("Press Enter to exit...")
+input()

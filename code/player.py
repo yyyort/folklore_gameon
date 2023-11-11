@@ -15,26 +15,17 @@ class Player(Entity):
 		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
 
 		#info
-		self.name = 'player'
-		self.gender = 'male'
-		self.stats = None
-		#stat
-		if self.gender == 'male': self.stats = male_player_data
-		else: self.stats = female_player_data
-		self.health = self.stats['health']
-		self.defense = self.stats['defense']
-		self.attack = self.stats['attack']
-		self.speed = self.stats['speed']
-		self.energy = self.stats['energy']
-		self.exp = 0
+		self.name = ''
+		self.gender = ''
+		self.stats = defualt_player_data
 
 		#items
 
 
 		# graphics setup
-		self.import_player_assets()
 		self.status = 'down'
-
+		self.character_path = ''
+  
 		# movement 
 		self.attacking = False
 		self.attack_cooldown = 400
@@ -65,15 +56,19 @@ class Player(Entity):
 		self.can_switch_item = True
 		self.item_switch_time = None
 
-		# stats
-		""" self.stats = {'health': 100,'energy':60,'attack': 10,'magic': 4,'speed': 5}
-		self.max_stats = {'health': 300, 'energy': 140, 'attack': 20, 'magic' : 10, 'speed': 10}
-		self.upgrade_cost = {'health': 100, 'energy': 100, 'attack': 100, 'magic' : 100, 'speed': 100}
-		self.health = self.stats['health'] * 0.5
-		self.energy = self.stats['energy'] * 0.8
-		self.exp = 0
-		self.speed = self.stats['speed'] """
+		self.health = self.stats['health']
+		self.energy = self.stats['energy']
+		self.defense = self.stats['defense']
+		self.attack = self.stats['attack']
+		self.speed = self.stats['speed']
 
+		self.sub_stats = {'exp' : 0, 'level' : 0, 'exp_cap' : 15, 'score' : 0}
+		self.exp = self.sub_stats['exp']
+		self.level = self.sub_stats['level']
+		self.exp_cap = self.sub_stats['exp_cap']
+		self.score = self.sub_stats['score']
+
+		self.can_attack = True
 
 		# damage timer
 		self.vulnerable = True
@@ -111,13 +106,12 @@ class Player(Entity):
 		
 
 	def import_player_assets(self):
-		character_path = '../graphics/player/'
 		self.animations = {'up': [],'down': [],'left': [],'right': [],
 			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
 			'right_attack':[],'left_attack':[],'up_attack':[],'down_attack':[]}
 
 		for animation in self.animations.keys():
-			full_path = character_path + animation
+			full_path = self.character_path + animation
 			self.animations[animation] = import_folder(full_path)
 
 	def input(self):
@@ -145,11 +139,18 @@ class Player(Entity):
 
 			# attack input 
 			if keys[pygame.K_SPACE]:
-				self.attacking = True
-				self.attack_time = pygame.time.get_ticks()
-				self.create_attack()
-				self.weapon_attack_sound.play()
-
+				if self.can_attack:
+					self.attacking = True
+					self.attack_time = pygame.time.get_ticks()
+					self.create_attack()
+					self.weapon_attack_sound.play()
+					self.energy -= 10
+     
+			if self.energy <= 0:
+				self.can_attack = False
+			else:
+				self.can_attack = True
+      
 			# magic input 
 			if keys[pygame.K_LCTRL]:
 				self.attacking = True
@@ -205,6 +206,17 @@ class Player(Entity):
 
 				self.item = list(item_data.keys())[self.item_index]
 
+			if keys[pygame.K_0]:
+				self.health = 0
+
+	def get_character(self, character):
+		if character == 'male':
+			self.character_path = '../graphics/player_alt/'
+			self.stats = male_player_data
+		elif character == 'female':
+			self.character_path = '../graphics/player/'
+			self.stats = female_player_data
+ 
 	def get_status(self):
 
 		# idle status
@@ -258,6 +270,7 @@ class Player(Entity):
 
 		# set the image
 		self.image = animation[int(self.frame_index)]
+		self.image = pygame.transform.scale(self.image, (TILESIZE, TILESIZE))
 		self.rect = self.image.get_rect(center = self.hitbox.center)
 
 		# flicker 
@@ -291,9 +304,15 @@ class Player(Entity):
 
 	def energy_recovery(self):
 		if self.energy < self.stats['energy']:
-			self.energy += 0.01 # * self.stats['magic']
+			self.energy += 0.1 * 1.50 # * self.stats['magic']
 		else:
 			self.energy = self.stats['energy']
+
+	def level_up(self):
+		if self.exp >= self.exp_cap:
+			self.level += 1
+			self.exp_cap *= 1.25
+			self.exp = self.sub_stats['exp']
 
 	def update(self):
 		"""text = (
@@ -303,11 +322,12 @@ class Player(Entity):
 
 			 )
 		debug(text)"""
-		
+		self.import_player_assets()
 		self.input()
 		self.cooldowns()
 		self.get_status()
 		self.animate()
 		self.move(self.speed)
 		self.energy_recovery()
+		self.level_up()
 		self.debuff_logic()
