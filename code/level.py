@@ -353,7 +353,7 @@ class Level:
 		if self.player.health <= 0:
 			self.state = 'game_over'
 
-		debug(self.player.health, 400, 400)
+#		debug(self.player.health, 400, 400)
 
 	def intro_state(self):
 		if self.state == 'intro':
