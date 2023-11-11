@@ -325,7 +325,7 @@ class Level:
 				self.visible_sprites.enemy_update(self.player)
 				self.player_attack_logic()
 				self.enemy_attack_logic()
-			
+    
 			#to be changed
 			""" if self.player.health <= 0:
 				#write to leaderboard json

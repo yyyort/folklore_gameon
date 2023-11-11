@@ -38,23 +38,19 @@ class Game:
 							self.level.toggle_menu()
 						if event.key == pygame.K_ESCAPE:
 							self.level.toggle_upgrade()
+       
+			self.screen.fill(WATER_COLOR)
 
 			if self.level.state == 'intro':
-				self.screen.fill(WATER_COLOR)
 				self.level.intro_state()
 
 			if self.level.state == 'end':
-				self.screen.fill(WATER_COLOR)
 				self.level.end_state()
 
 			if self.level.state == 'game':
-				self.screen.fill(WATER_COLOR)
 				self.level.run()
 				
 
-			#self.screen.fill(WATER_COLOR)
-			#self.level.run()
-			pygame.display.update()
 			pygame.display.flip()
 			self.clock.tick(FPS)
 
