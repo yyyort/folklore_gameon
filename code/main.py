@@ -32,6 +32,12 @@ class Game:
 							self.level.intro.input = self.level.intro.input[:-1]
 						else:
 							self.level.intro.input += event.unicode
+				if self.level.state == 'game':
+					if event.type == pygame.KEYDOWN:
+						if event.key == pygame.K_m:
+							self.level.toggle_menu()
+						if event.key == pygame.K_ESCAPE:
+							self.level.toggle_upgrade()
 
 			if self.level.state == 'intro':
 				self.screen.fill(WATER_COLOR)
@@ -44,13 +50,12 @@ class Game:
 			if self.level.state == 'game':
 				self.screen.fill(WATER_COLOR)
 				self.level.run()
-				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_m:
-						self.level.toggle_menu()
+				
 
 			#self.screen.fill(WATER_COLOR)
 			#self.level.run()
 			pygame.display.update()
+			pygame.display.flip()
 			self.clock.tick(FPS)
 
 if __name__ == '__main__':

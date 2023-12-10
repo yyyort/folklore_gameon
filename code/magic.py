@@ -41,3 +41,46 @@ class MagicPlayer:
 					x = player.rect.centerx + randint(-TILESIZE // 3, TILESIZE // 3)
 					y = player.rect.centery + offset_y + randint(-TILESIZE // 3, TILESIZE // 3)
 					self.animation_player.create_particles('flame',(x,y),groups)
+
+	""" def projectile(self, player, cost, groups):
+		self.sounds['flame'].play()
+
+		if player.status.split('_')[0] == 'right': direction = pygame.math.Vector2(1,0)
+		elif player.status.split('_')[0] == 'left': direction = pygame.math.Vector2(-1,0)
+		elif player.status.split('_')[0] == 'up': direction = pygame.math.Vector2(0,-1)
+		else: direction = pygame.math.Vector2(0,1)
+
+		#move the projectile
+		for i in range(1,6):
+			if direction.x: #horizontal
+				x = player.rect.centerx + i
+				y = player.rect.centery + i
+				self.animation_player.create_particles('flame',(x,y),groups)
+			else: # vertical
+				x = player.rect.centerx + 1
+				y = player.rect.centery + 1
+				self.animation_player.create_particles('flame',(x,y),groups) """
+
+	#changed for skill
+	def normal(self, player,cost,groups):
+		""" if player.energy >= cost:
+			player.energy -= cost """
+		self.sounds['flame'].play()
+
+		if player.status.split('_')[0] == 'right': direction = pygame.math.Vector2(1,0)
+		elif player.status.split('_')[0] == 'left': direction = pygame.math.Vector2(-1,0)
+		elif player.status.split('_')[0] == 'up': direction = pygame.math.Vector2(0,-1)
+		else: direction = pygame.math.Vector2(0,1)
+		#move the projectile
+		for i in range(1,6):
+			if direction.x: #horizontal
+				x = player.rect.centerx + i 
+				y = player.rect.centery + i 
+				
+				self.animation_player.create_projectile('flame',(x,y),groups, player.status.split('_')[0])
+			else: # vertical
+				x = player.rect.centerx + i 
+				y = player.rect.centery + i
+				self.animation_player.create_projectile('flame',(x,y),groups, player.status.split('_')[0])
+		
+				
